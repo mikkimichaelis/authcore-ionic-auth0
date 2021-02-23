@@ -35,6 +35,7 @@ import { Zoom } from '@ionic-native/zoom/ngx';
 // import { TranslateUniversalLoader } from './utils/translateuniversalloader';
 
 import { AuthService } from './services/auth.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -56,6 +57,7 @@ import { AuthService } from './services/auth.service';
     AngularFirestoreModule,     // TODO AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [
     AuthService,
@@ -69,6 +71,7 @@ import { AuthService } from './services/auth.service';
     AngularFirestore,
     TranslateService,
     AngularFireAuth,
+    HttpClient,
     Zoom
   ],
   bootstrap: [AppComponent]
