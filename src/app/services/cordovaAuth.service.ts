@@ -91,9 +91,9 @@ export class AuthService {
     this.loggedIn = false;
     this.safariViewController.isAvailable()
       .then((available: boolean) => {
-        const auth0Domain = AUTH_CONFIG.domain;
-        const clientId = AUTH_CONFIG.clientId;
-        const pkgId = AUTH_CONFIG.packageIdentifier;
+        const auth0Domain = CORDOVA_CONFIG.domain;
+        const clientId = CORDOVA_CONFIG.clientId;
+        const pkgId = CORDOVA_CONFIG.packageIdentifier;
         let url = `https://${auth0Domain}/v2/logout?client_id=${clientId}&returnTo=${pkgId}://${auth0Domain}/cordova/${pkgId}/callback`;
         if (available) {
           this.safariViewController.show({
@@ -163,7 +163,7 @@ export class AuthService {
     // }
     const getToken$ = () => {
       return this.http
-        .get(`${environment.apiAuthTokenExchange}auth/firebase`, {
+        .get(`${WEB_CONFIG.apiAuthTokenExchange}auth/firebase`, {
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`)
         });
     };

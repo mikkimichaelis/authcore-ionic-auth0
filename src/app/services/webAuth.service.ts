@@ -53,7 +53,7 @@ export class AuthService {
     // Ensure all auth items removed
     this.storage.remove('expires_at');
     this.storage.remove('auth_redirect');
-    window.location.href = `https://${environment.auth.clientDomain}/v2/logout?client_id=${AUTH_CONFIG.clientId}&returnTo=${encodeURIComponent(environment.auth.redirect)}`;
+    window.location.href = `https://${WEB_CONFIG.auth.clientDomain}/v2/logout?client_id=${WEB_CONFIG.auth.clientId}&returnTo=${encodeURIComponent(WEB_CONFIG.auth.redirect)}`;
     this.accessToken = undefined;
     this.userProfile = undefined;
     this.loggedIn = false;
