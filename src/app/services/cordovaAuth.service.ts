@@ -125,15 +125,17 @@ export class AuthService {
   getUserInfo(authResult) {
     // Use access token to retrieve user's profile and set session
     this.Auth0.client.userInfo(this.accessToken, (err, profile) => {
-      if (err) {
-        throw err;
-      }
+      
       if (profile) {
+        this._setSession(authResult, profile);
         this.storage.set('profile', profile).then(val =>
           this.zone.run(() => this.user = profile)
         );
       }
 
+      if (err) {
+        console.warn(`Error retrieving profile: ${err.error}`);
+      }
       // Redirect to desired route
       this.router.navigateByUrl(localStorage.getItem('auth_redirect'));
     });
@@ -238,4 +240,6 @@ export class AuthService {
       this.refreshFirebaseTokenSub.unsubscribe();
     }
   }
+
+  handleLoginCallback() {}
 }
