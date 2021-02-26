@@ -9,10 +9,10 @@ import { AUTH_SERVICE, IAuthService } from './services';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(@Inject(AUTH_SERVICE) private auth: IAuthService) { }
+  constructor(@Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   ngOnInit() {
-    this.auth.handleLoginCallback();
+    this.authService.handleLoginCallback();
   }
 
 }

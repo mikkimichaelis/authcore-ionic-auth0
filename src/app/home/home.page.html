@@ -14,10 +14,10 @@
       button
       expand="block"
       color="primary"
-      *ngIf="!auth.loggedIn"
-      (click)="auth.login()">Log In</ion-button>
+      *ngIf="!auth.isAuthenticated"
+      (click)="auth.signIn()">Log In</ion-button>
     <!-- Not loading, logged in: show profile and logout button -->
-    <ng-template [ngIf]="auth.loggedIn">
+    <ng-template [ngIf]="auth.isAuthenticated">
       <ion-card *ngIf="auth.user">
         <img [src]="auth.user.picture">
         <ion-card-content>
@@ -29,7 +29,7 @@
         button
         expand="block"
         color="danger"
-        (click)="auth.logout()">Log Out</ion-button>
+        (click)="auth.signOut()">Log Out</ion-button>
     </ng-template>
   </ng-template>
 </ion-content>

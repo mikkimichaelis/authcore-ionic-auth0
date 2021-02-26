@@ -10,7 +10,7 @@ import { BUSY_SERVICE, IBusyService, IToastService, TOAST_SERVICE } from 'src/ap
 })
 export class AccountPage implements OnInit {
 
-  loggedIn = false;
+  isAuthenticated = false;
   userName = '';
   password = '';
 
@@ -24,9 +24,9 @@ export class AccountPage implements OnInit {
     this.zoomService.isLoggedIn().then((success) => {
       console.log(success);
       if (success === true) {
-        this.loggedIn = true;
+        this.isAuthenticated = true;
       } else {
-        this.loggedIn = false;
+        this.isAuthenticated = false;
       }
     }).catch((error) => {
       console.log(error);
@@ -34,13 +34,13 @@ export class AccountPage implements OnInit {
     });
   }
 
-  login() {
+  signIn() {
     this.busyService.present('Logging in Zoom user.');
     this.zoomService.login(this.userName, this.password).then((success) => {
       console.log(success);
       console.log(success.message);
       this.presentToast(success.message);
-      this.loggedIn = true;
+      this.isAuthenticated = true;
       this.userName = '';
       this.password = '';
     }).catch((error) => {
@@ -54,12 +54,12 @@ export class AccountPage implements OnInit {
   /**
    * Log user out.
    */
-  logout() {
+  signOut() {
     console.log('Going to logout');
     this.zoomService.logout().then((success) => {
       console.log(success.message);
       this.presentToast(success.message);
-      this.loggedIn = false;
+      this.isAuthenticated = false;
     }).catch((error) => {
       this.presentToast(error.message);
       console.log(error);

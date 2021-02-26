@@ -17,24 +17,25 @@ import { environment } from 'src/environments/environment';
 declare let cordova: any;
 @Injectable()
 export class AuthService {
-  Auth0 = new auth0.WebAuth(CORDOVA_CONFIG);  // TODO WEB_CONFIG
-  Client = new Auth0Cordova(CORDOVA_CONFIG);
+  loading = true;
 
+  user: any;
+  userProfile: any;
+  isAuthenticated: boolean;
+  loggedInFirebase: boolean;
+  
   options = {
     responseType: 'token',
     audience: 'https://meetingmakerapp.uc.r.appspot.com',
     scope: 'openid profile email offline_access'
   };
 
-  accessToken: string;
-  user: any;
-  loggedIn: boolean;
-  loggedInFirebase: boolean;
-  loading = true;
+  private accessToken: string;
+  private firebaseTokenSub: Subscription;
+  private refreshFirebaseTokenSub: Subscription;
 
-  userProfile: any;
-  firebaseTokenSub: Subscription;
-  refreshFirebaseTokenSub: Subscription;
+  private Auth0 = new auth0.WebAuth(CORDOVA_CONFIG);  // TODO WEB_CONFIG
+  private Client = new Auth0Cordova(CORDOVA_CONFIG);
 
   constructor(
     public zone: NgZone,
@@ -47,12 +48,12 @@ export class AuthService {
     this.storage.get('profile').then(user => this.user = user);
     this.storage.get('access_token').then(token => this.accessToken = token);
     this.storage.get('expires_at').then(exp => {
-      this.loggedIn = Date.now() < JSON.parse(exp);
+      this.isAuthenticated = Date.now() < JSON.parse(exp);
       this.loading = false;
     });
   }
 
-  login() {
+  signIn() {
     this.loading = true;
     // Authorize login request with Auth0: open login page and get auth results
     this.Client.authorize(this.options, (err, authResult) => {
@@ -69,7 +70,7 @@ export class AuthService {
       this.storage.set('expires_at', expiresAt);
       // Set logged in
       this.loading = false;
-      this.loggedIn = true;
+      this.isAuthenticated = true;
 
       // Fetch user's profile info
       this.getUserInfo(authResult);
@@ -85,10 +86,10 @@ export class AuthService {
     });
   }
 
-  logout() {
+  signOut() {
     this.accessToken = null;
     this.user = null;
-    this.loggedIn = false;
+    this.isAuthenticated = false;
     this.safariViewController.isAvailable()
       .then((available: boolean) => {
         const auth0Domain = CORDOVA_CONFIG.domain;
@@ -146,8 +147,8 @@ export class AuthService {
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + Date.now());
     localStorage.setItem('expires_at', expiresAt);
     this.userProfile = profile;
-    // Session set; set loggedIn and loading
-    this.loggedIn = true;
+    // Session set; set isAuthenticated and loading
+    this.isAuthenticated = true;
     this.loading = false;
     this.storage.set('profile', profile).then(val =>
       this.zone.run(() => this.user = profile)
@@ -159,7 +160,7 @@ export class AuthService {
   private _getFirebaseToken() {
     // Prompt for login if no access token
     // if (!this.accessToken) {
-    //   this.login();
+    //   this.signIn();
     // }
     const getToken$ = () => {
       return this.http

@@ -24,7 +24,7 @@ export class AuthService {
   user: any;
   userProfile: any;
   // Track authentication status
-  loggedIn: boolean;
+  isAuthenticated: boolean;
   loading: boolean;
   // Track Firebase authentication status
   loggedInFirebase: boolean;
@@ -41,7 +41,7 @@ export class AuthService {
     private http: HttpClient
   ) {}
 
-  login(redirect?: string) {
+  signIn(redirect?: string) {
     // Set redirect after login
     const _redirect = redirect ? redirect : this.router.url;
     this.storage.set('auth_redirect', _redirect);
@@ -49,14 +49,14 @@ export class AuthService {
     this.Auth0.authorize();
   }
 
-  logout() {
+  signOut() {
     // Ensure all auth items removed
     this.storage.remove('expires_at');
     this.storage.remove('auth_redirect');
     window.location.href = `https://${WEB_CONFIG.auth.clientDomain}/v2/logout?client_id=${WEB_CONFIG.auth.clientId}&returnTo=${encodeURIComponent(WEB_CONFIG.auth.redirect)}`;
     this.accessToken = undefined;
     this.userProfile = undefined;
-    this.loggedIn = false;
+    this.isAuthenticated = false;
     // Sign out of Firebase
     this.loggedInFirebase = false;
     this.afAuth.auth.signOut();
@@ -109,8 +109,8 @@ export class AuthService {
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + Date.now());
     this.storage.set('expires_at', expiresAt);
     this.userProfile = profile;
-    // Session set; set loggedIn and loading
-    this.loggedIn = true;
+    // Session set; set isAuthenticated and loading
+    this.isAuthenticated = true;
     this.loading = false;
     // Get Firebase token
     this._getFirebaseToken();
@@ -121,7 +121,7 @@ export class AuthService {
   private _getFirebaseToken() {
     // Prompt for login if no access token
     if (!this.accessToken) {
-      this.login();
+      this.signIn();
     }
     const getToken$ = () => {
       return this.http
