@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home/tab/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title translate>TITLE.LIVE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let meeting of this.meetingService.liveMeetings$ | async">
+    <!-- // TODO review watch -->
+    <meeting-listing [meeting]="meeting" [watch]="false"></meeting-listing>
+  </ion-list>
+</ion-content>

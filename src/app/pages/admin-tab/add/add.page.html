@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title translate>Register Meeting</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" translate>CANCEL</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="submitForm()" color="danger" expand="block" translate>SAVE</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="meetingForm" (ngSubmit)="submitForm()" novalidate>
+    <ion-card>
+      <ion-card-content>
+        <p>
+          All data provided below is verified by hand, so please be accurate.
+          Please add only known actively scheduled Zoom 12-Step meetings.
+
+          Note, this does not create a Zoom Meeting, that must be done first in Zoom.
+        </p>
+
+        <ion-item lines="full">
+          <ion-label position="start">I am the Zoom Meeting Owner</ion-label>
+          <ion-checkbox slot="end" formControlName="owner"></ion-checkbox>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="start">Continuous 24h Meeting</ion-label>
+          <ion-checkbox slot="end" formControlName="continuous"></ion-checkbox>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Meeting Number</ion-label>
+          <ion-input formControlName="id" type="text" class="form-controll" required></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Meeting Password</ion-label>
+          <ion-input formControlName="password" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Meeting Name</ion-label>
+          <ion-input formControlName="name" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Meeting Topic</ion-label>
+          <ion-input formControlName="topic" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Meeting Tags</ion-label>
+          <ion-textarea formControlName="tags" placeholder="tags entered here will be censored"></ion-textarea>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="showRecurrence">
+      <ion-card-content>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Timezone</ion-label>
+          <ion-select placeholder="Select Timezone" formControlName="timezone">
+            <ion-select-option value="America/New_York">America/New_York</ion-select-option>
+            <ion-select-option value="America/Chicago">America/Chicago</ion-select-option>
+            <ion-select-option value="America/Denver">America/Denver</ion-select-option>Pacific/Honolulu
+            <ion-select-option value="America/Los_Angeles">America/Los_Angeles</ion-select-option>
+            <ion-select-option value="America/Anchorage">America/Anchorage</ion-select-option>
+            <ion-select-option value="Pacific/Honolulu">Pacific/Honolulu</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Start Time</ion-label>
+          <ion-datetime formControlName="startTime" display-format="h:mm A" picker-format="h:mm A">
+          </ion-datetime>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Duration</ion-label>
+          <ion-select placeholder="Select Duration" formControlName="duration">
+            <ion-select-option value=30>30 min</ion-select-option>
+            <ion-select-option value=60>60 min</ion-select-option>
+            <ion-select-option value=90>90 min</ion-select-option>
+            <ion-select-option value=120>120 min</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="showRecurrence">
+      <ion-card-content>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Repeat</ion-label>
+          <ion-select placeholder="Repeat" formControlName="recurrenceType">
+            <ion-select-option value="Daily">Daily</ion-select-option>
+            <ion-select-option value="Weekly">Weekly</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="full" *ngIf="recurrenceType === 'Weekly'">
+          <ion-label position="floating">On</ion-label>
+          <ion-select placeholder="Select Day" formControlName="weekly_day">
+            <ion-select-option value="Sunday">Sunday</ion-select-option>
+            <ion-select-option value="Monday">Monday</ion-select-option>
+            <ion-select-option value="Tuesday">Tuesday</ion-select-option>
+            <ion-select-option value="Wednesday">Wednesday</ion-select-option>
+            <ion-select-option value="Thursday">Thursday</ion-select-option>
+            <ion-select-option value="Friday">Friday</ion-select-option>
+            <ion-select-option value="Saturday">Saturday</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+
+
+      </ion-card-content>
+    </ion-card>
+  </form>
+
+  <!-- <ion-item>
+    <ion-tags-input [(ngModel)]="tags" (onChange)="onChange($event)"></ion-tags-input>
+  </ion-item> -->
+</ion-content>

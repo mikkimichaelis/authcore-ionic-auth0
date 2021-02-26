@@ -3,6 +3,11 @@
 
 auth.config.ts
 
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+#!/plugins/cordova-universal-links-plugin/hooks/lib/ios/xcodePreferences.js
+
 *~
 *.sw[mnpcod]
 *.log
@@ -34,3 +39,42 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+/src/environments
+
+.firebase/
+
+!resources/
+resources/*
+!resources/icon.png
+!resources/splash.png
+
+!resources/images
+
+# !resources/android
+# resources/android/*
+# !resources/android/xml
+# resources/android/xml/*
+# !resources/android/xml/network_security_config.xml
+
+# !plugins/
+# plugins/*
+# !plugins/cordova-universal-links-plugin/
+# plugins/cordova-universal-links-plugin/*
+# !plugins/cordova-universal-links-plugin/hooks
+# plugins/cordova-universal-links-plugin/hooks/*
+# !plugins/cordova-universal-links-plugin/hooks/lib
+# plugins/cordova-universal-links-plugin/hooks/lib/*
+
+# !plugins/cordova-universal-links-plugin/hooks/lib/ios
+# plugins/cordova-universal-links-plugin/hooks/lib/ios/*
+# !plugins/cordova-universal-links-plugin/hooks/lib/ios/xcodePreferences.js
+
+# !plugins/cordova-universal-links-plugin/hooks/lib/android
+# plugins/cordova-universal-links-plugin/hooks/lib/android/*
+# !plugins/cordova-universal-links-plugin/hooks/lib/android/manifestWriter.js
+
+
+
+
+

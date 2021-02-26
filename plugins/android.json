@@ -1,0 +1,44 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-customurlscheme": {
+      "URL_SCHEME": "com.auth0.ionic",
+      "ANDROID_SCHEME": "com.auth0.ionic",
+      "ANDROID_HOST": "aluque.auth0.com",
+      "ANDROID_PATHPREFIX": "/cordova/com.auth0.ionic/callback",
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-ionic-webview": {
+      "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-safariviewcontroller": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    }
+  },
+  "dependent_plugins": {}
+}

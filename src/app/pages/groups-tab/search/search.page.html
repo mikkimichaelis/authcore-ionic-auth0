@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title translate>TITLE.MEETINGS.SEARCH</ion-title>
+    <ion-label>{{this.groupsSvc.verbose}}</ion-label>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentSettings()">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12" size-md="6" *ngFor="let group of groupsSvc.groups$ | async">
+        <ion-card class="group-card">
+          <ion-card-header>
+            <h4>{{group.name}}</h4>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-item slot="start" detail="false" (click)="details(group)">
+
+              {{group.schedules[0].day}} {{ group.schedules[0].time }}<br />
+              <span *ngIf="group.location.name != ''">{{ group.location.name }}<br /></span>
+              {{ group.location.address1 }}<br />
+              {{ group.location.city }}, {{ group.location.state }} {{ group.location.zip }}
+              {{ group.telephone}}
+
+              <ion-img class="logo" src="assets/images/aa.png"></ion-img>
+
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

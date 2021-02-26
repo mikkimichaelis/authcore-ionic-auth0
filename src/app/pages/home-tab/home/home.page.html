@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <!-- <ion-title translate>TITLE.WELCOME<span> {{(this.userService.user$ | async)?.name}}</span></ion-title> -->
+    <ion-title>WhitsApp</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-icon slot="end" name="share-outline" style="margin-right: 50px;" (click)="share()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <meeting-listing *ngIf="this.userService.homeMeeting$ | async as homeMeeting"
+    [meeting]="homeMeeting" [watch]="true"></meeting-listing>
+
+  <ion-item
+    *ngIf="(meetingService.favoriteMeetings$ | async) ? (meetingService.favoriteMeetings$ | async).length > 0 : false">
+    <ion-label>Favorite Meetings</ion-label>
+    <ion-icon slot="start" name="list-outline" (click)="viewFavorites()"></ion-icon>
+  </ion-item>
+  <ion-list *ngFor="let favorite of meetingService.favoriteMeetings$ | async">
+    <meeting-listing [meeting]="favorite" [watch]="false"></meeting-listing>
+  </ion-list>
+
+  <ion-item
+    *ngIf="(this.meetingService.liveMeetings$ | async) ? (this.meetingService.liveMeetings$ | async).length > 0 : false">
+    <ion-label>Live Meetings</ion-label>
+    <ion-icon slot="start" name="list-outline" (click)="viewLive()"></ion-icon>
+  </ion-item>
+
+  <ion-list *ngFor="let meeting of this.meetingService.liveMeetings$ | async">
+    <meeting-listing [meeting]="meeting" [watch]="false"></meeting-listing>
+  </ion-list>
+  
+  <ion-item>
+    <!-- <p>
+      AnonymousMeetings relies on your support to fund it's 
+      development.  If you find it useful and motivating to
+      get and remain in recovery, please consider supporting the
+      app by buying me a coffee.  Any tip given will
+      also remove all advertisements from the app.
+  </p> -->
+    <a (click)="buymeacoffee()">
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="Buy Me A Coffee"
+        style="height: 60px !important;">
+      <!-- <img src="https://img.buymeacoffee.com/button-api/?text=Please buy me a coffee&emoji=&slug=mikkimichaelis&button_colour=f4a4c0&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /> -->
+    </a>
+  </ion-item>
+</ion-content>

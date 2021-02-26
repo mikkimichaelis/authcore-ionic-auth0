@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title translate>Meeting Details</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" translate>CLOSE</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end" *ngIf="meeting">
+      <ion-icon slot="end" name="share-outline" style="margin-right: 20px;" (click)="share(meeting)"></ion-icon>
+      <ion-icon slot="end" name="heart-outline" style="margin-right: 20px;" (click)="addFavorite(meeting)" *ngIf="!isFavorite(meeting)"></ion-icon>
+      <ion-icon slot="end" name="heart" style="margin-right: 20px;" (click)="removeFavorite(meeting)" *ngIf="isFavorite(meeting)"></ion-icon>
+
+      <ion-icon slot="end" name="home-outline" style="margin-right: 20px;" (click)="addHome(meeting)" *ngIf="!isHome(meeting)"></ion-icon>
+      <ion-icon slot="end" name="home" style="margin-right: 20px;" (click)="removeHome(meeting)" *ngIf="isHome(meeting)"></ion-icon>
+
+      <ion-icon slot="end" name="pencil-outline" style="margin-right: 20px;" (click)="editMeeting(meeting)" *ngIf="isOwner(meeting)"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="meeting">
+  <ion-card>
+    <ion-card-content>
+
+      <ion-item *ngIf="meeting.buymeacoffee">
+        <img src={{meeting.buymeacoffee.src}} (click)="buymeacoffee(meeting.buymeacoffee.url)">
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Zoom Meeting Owner</ion-label>
+        <ion-label>{{meeting.isZoomOwner}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Meeting Number</ion-label>
+        <ion-label>{{meeting.zid}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Meeting Password</ion-label>
+        <ion-label>{{meeting.password}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Meeting Name</ion-label>
+        <ion-label>{{meeting.name}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Meeting Topic</ion-label>
+        <ion-label>{{meeting.topic}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Continuous 24h Meeting</ion-label>
+        <ion-label>{{meeting.continuous}}</ion-label>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="showRecurrence">
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label>Timezone</ion-label>
+        <ion-text>{{meeting.timezone}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Start Time</ion-label>
+        <ion-label>{{meeting.startTime}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Duration</ion-label>
+        <ion-label>{{meeting.duration}}</ion-label>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="showRecurrence">
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label>Repeat</ion-label>
+        <ion-label>{{meeting.recurrence.type}}</ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="recurrenceType === 'Weekly'">
+        <ion-label>On</ion-label>
+        <ion-label>{{meeting.recurrence.weekly_day}}</ion-label>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

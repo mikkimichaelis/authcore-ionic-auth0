@@ -6,14 +6,14 @@ export const environment = {
   production: false,
   design: "ios",      // "md"
   firebaseConfig: {
-    apiKey: "AIzaSyDMbs0uwJ_NcUdFdi6JASm-gzqOPz4vXqE",
-    authDomain: "meeting-maker-app.firebaseapp.com",
-    projectId: "meeting-maker-app",
-    storageBucket: "meeting-maker-app.appspot.com",
-    messagingSenderId: "22169526402",
-    appId: "1:22169526402:web:96e57dee3e273b918b949b",
-    measurementId: "G-BDSQFED9QG",
-    databaseURL: "https://meeting-maker-app.firebaseio.com",
+    apiKey: "AIzaSyDTB6TRgJNOHvuq_L0YxNHSRufJx36y6dk",
+    authDomain: "anonymousmeetings.firebaseapp.com",
+    databaseURL: "https://anonymousmeetings.firebaseio.com",
+    projectId: "anonymousmeetings",
+    storageBucket: "anonymousmeetings.appspot.com",
+    messagingSenderId: "743896601158",
+    appId: "1:743896601158:web:460244580c9f6cdaaab047",
+    measurementId: "G-KJRD16EWZ5",
     useEmulators: false
   },
   googleCloudConfig: {

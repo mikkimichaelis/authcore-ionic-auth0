@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title translate>TITLE.MEETINGS.SEARCH.SETTINGS</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" translate>CANCEL</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" translate>SAVE</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-radio-group [(ngModel)]='gps'>
+      <ion-list-header>
+        <ion-label translate>LOCATION</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label translate>GPS</ion-label>
+        <ion-radio slot="start" value="gps"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label translate>POSTCODE</ion-label>
+        <ion-radio slot="start" value="zipcode"></ion-radio>
+        <ion-input slot="end" type="number" [(ngModel)]="settings.zipcode" *ngIf="!settings.gps"></ion-input>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label translate>SEARCHRADIUS</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <!-- <ion-label translate>SEARCHRADIUS</ion-label> -->
+      <ion-range min="1" max="100" color="secondary" [(ngModel)]="settings.radius">
+        <ion-label slot="start">1km</ion-label>
+        <ion-label slot="end">100km</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label translate>BYDAY</ion-label>
+    </ion-list-header>
+
+    <ion-radio-group [(ngModel)]="byDay">
+
+      <ion-item>
+        <ion-label translate>ANYDAY</ion-label>
+        <ion-radio slot="start" value="any"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label translate>TODAY</ion-label>
+        <ion-radio slot="start" value="today"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label translate>SPECIFIC.DAY</ion-label>
+        <ion-radio slot="start" value="specific" (click)="openPicker()"></ion-radio>
+        <ion-label *ngIf="!settings.byAnyDay && settings.byDay !== 'today'">{{settings.byDay}}</ion-label>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label translate>BYTIME</ion-label>
+    </ion-list-header>
+
+    <ion-radio-group [(ngModel)]="byTime">
+
+      <ion-item>
+        <ion-label translate>ANYTIME</ion-label>
+        <ion-radio slot="start" value="any"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-radio slot="start" value="specific"></ion-radio>
+        
+        <ion-label slot="start" translate>FROM</ion-label>
+        <ion-datetime #timePickerStart slot="start" *ngIf="settings.bySpecificTime"
+          [(value)]="settings.bySpecific.start" (ionChange)="updateBySpecificTime('start', timePickerStart.value)"
+          display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+
+        <ion-label translate>to</ion-label>
+        <ion-datetime #timePickerEnd *ngIf="settings.bySpecificTime" [(value)]="settings.bySpecific.end"
+          (ionChange)="updateBySpecificTime('end', timePickerEnd.value)" display-format="h:mm A" picker-format="h:mm A">
+        </ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-radio slot="start" value="relative"></ion-radio>
+        <ion-label slot="start" translate>STARTS.WITHIN</ion-label>
+        <ion-input slot="end" type="number" [(ngModel)]="settings.byRelative.early" *ngIf="settings.byRelativeTime">
+        </ion-input>
+        <ion-label slot="end" translate>HOURS</ion-label>
+      </ion-item>
+    </ion-radio-group>
+
+  </ion-list>
+
+</ion-content>

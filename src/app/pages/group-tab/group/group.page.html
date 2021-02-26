@@ -1,0 +1,226 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <!-- <ion-title translate>TITLE.MEETING.INFO</ion-title> -->
+    <ion-title translate>TITLE.WELCOME<span> {{(this.userService.user$ | async)?.name}}</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="groupSvc.group$ | async; let group">
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{group.name}} ({{group.type}})</ion-card-title>
+      <!-- TODO translate tags -->
+      <ion-card-subtitle>{{group.tagsString}}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-item>
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label translate>GROUP.STARTED</ion-label>
+      <ion-text>{{group.started}}</ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="arrow-up-circle-outline"></ion-icon>
+      <ion-label translate>LAST.ACTIVITY</ion-label>
+      <ion-text>{{group.lastActivity}}</ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="people-outline"></ion-icon>
+      <ion-label translate>GROUP.MEMBERS</ion-label>
+      <ion-text>{{group.memberCount}}</ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label translate>GROUP.YEARS.SOBRIETY</ion-label>
+      <ion-text>{{group.yearsSobriety}}</ion-text>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="people-circle-outline"></ion-icon>
+      <ion-label translate>GROUP.MEMBERS.ONLINE</ion-label>
+      <ion-text>{{group.membersOnline}}</ion-text>
+    </ion-item>
+
+    <ion-card-content>
+      <ion-item *ngIf="group.about">
+        {{group.about}}
+      </ion-item>
+      <ion-item *ngIf="group.notes">
+        {{group.notes}}
+      </ion-item>
+      <!-- <ion-item>
+        <ion-icon name="heart" (click)="makeFavGroup(group, false)" *ngIf="isFavorite"></ion-icon>
+        <ion-icon name="heart-outline" (click)="makeFavGroup(group, true)" *ngIf="!isFavorite"></ion-icon>
+      </ion-item> -->
+      <ion-item>
+        <ion-button fill="outline" slot="end" (click)="makeHomegroup(group)" *ngIf="!isHomeGroup" translate>GROUP.MAKE.HOMEGROUP</ion-button>
+        <ion-icon slot="end" name="home-outline" *ngIf="isHomeGroup" >Homegroup</ion-icon>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Next Scheduled Meeting</ion-card-title>
+      <ion-icon slot="end" name="share-outline"></ion-icon>
+      <!-- <ion-card-subtitle></ion-card-subtitle> -->
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label>When</ion-label>
+        <ion-text>{{group.schedules[0].day}} @ {{group.schedules[0].time}}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Location</ion-label>
+        <ion-text>{{group.location.address1}}<br />{{group.location.city}}, {{group.location.state}} {{group.location.zip}}<br />{{group.location.country}}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-button fill="outline" slot="start">Add to Calendar</ion-button>
+        <ion-button fill="outline" slot="end">Set Reminder</ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="group.schedules[0].zoom"> 
+    <ion-card-header>
+      <!-- <ion-icon style="float: right;" name="share-outline"></ion-icon> -->
+      <ion-card-title>Zoom Meeting</ion-card-title>
+      <ion-card-subtitle>starts Monday at 6:30 PM EST</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <!-- <ion-icon slot="end" name="share-outline"></ion-icon> -->
+        <ion-button fill="outline" slot="start">Join Zoom Meeting</ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!group.schedules[0].zoom">
+    <ion-card-header>
+      <ion-card-title>Ride Request</ion-card-title>
+      <ion-card-subtitle></ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Phone Number</ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-button fill="outline" slot="end">Request Ride at current GPS location</ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-title>Send Group Secretary a Message</ion-card-title>
+        <ion-card-subtitle></ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-item>
+        <ion-textarea placeholder="Enter your message here..."></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-button fill="outline" slot="end">Send</ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Contact Card</ion-card-title>
+      <ion-card-subtitle></ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-icon slot="start" name="call-outline"></ion-icon>
+        <ion-label>telephone</ion-label>
+        <ion-text>{{group.telephone}}</ion-text>
+      </ion-item>
+
+      <!-- <ion-item>
+        <ion-icon slot="start" name="copy-outline"></ion-icon>
+        <ion-label>fax</ion-label>
+        <ion-text>+1 (417) 555-1212</ion-text>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>email</ion-label>
+        <ion-text>{{group.email}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="planet-outline"></ion-icon>
+        <ion-label>www</ion-label>
+        <ion-text>{{group.url}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        <ion-label>address</ion-label>
+        <ion-text>{{group.address.address1}}<br />{{group.address.city}}, {{group.address.state}} {{group.address.zip}}</ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-button fill="outline" slot="end" (click)="makeContact(group)">Save as Contact</ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Previous Meeting Topics</ion-card-title>
+      <ion-card-subtitle></ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Pokémon Yellow</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Mega Man X</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>The Legend of Zelda</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Pac-Man</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Super Mario World</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Attendance Card</ion-card-title>
+      <ion-card-subtitle></ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-img src="assets/images/attendance.png"></ion-img>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
