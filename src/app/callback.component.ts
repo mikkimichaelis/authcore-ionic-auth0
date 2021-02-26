@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services';
+import { Component, Inject, OnInit } from '@angular/core';
+import { AUTH_SERVICE, IAuthService } from './services';
 
 @Component({
   selector: 'app-callback',
@@ -9,7 +9,7 @@ import { AuthService } from './services';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(private auth: AuthService) { }
+  constructor(@Inject(AUTH_SERVICE) private auth: IAuthService) { }
 
   ngOnInit() {
     this.auth.handleLoginCallback();

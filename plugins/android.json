@@ -7,6 +7,12 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-browsertab": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-buildinfo": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
     "cordova-plugin-customurlscheme": {
       "URL_SCHEME": "com.auth0.ionic",
       "ANDROID_SCHEME": "com.auth0.ionic",
@@ -17,6 +23,10 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.auth0.ionic"
     },
+    "cordova-plugin-email-composer": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.auth0.ionic"
     },
@@ -25,6 +35,9 @@
     },
     "cordova-plugin-ionic-webview": {
       "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-nativestorage": {
       "PACKAGE_NAME": "com.auth0.ionic"
     },
     "cordova-plugin-safariviewcontroller": {
@@ -38,7 +51,17 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    },
+    "cordova.plugin.zoom": {
+      "PACKAGE_NAME": "com.auth0.ionic"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.auth0.ionic"
+    }
+  }
 }

@@ -56,24 +56,24 @@ export class SearchPage implements OnInit {
   }
 
   async presentSettings() {
-    if( (<any>this)._infoWindow ) { 
-      (<any>this)._infoWindow.close(); 
-      (<any>this)._infoWindow = null; 
-    }
+    // if( (<any>this)._infoWindow ) { 
+    //   (<any>this)._infoWindow.close(); 
+    //   (<any>this)._infoWindow = null; 
+    // }
     
-    const modal = await this.modalCtrl.create({
-      component: SearchSettingsPage,
-      cssClass: 'search-options-class',
-      componentProps: { input: Object.assign( {}, this.settingsSvc.settings.searchSettings) },
-      swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl
-    });
-    const rv: any =  await modal.present();
-    const settings = await modal.onWillDismiss();
-    if( settings.data ) {
-      this.settingsSvc.settings.searchSettings = <any>settings.data;
-      await this.settingsSvc.save()
-      await this.refresh();
-    }
+    // const modal = await this.modalCtrl.create({
+    //   component: SearchSettingsPage,
+    //   cssClass: 'search-options-class',
+    //   componentProps: { input: Object.assign( {}, this.settingsSvc.settings.searchSettings) },
+    //   swipeToClose: true,
+    //   presentingElement: this.routerOutlet.nativeEl
+    // });
+    // const rv: any =  await modal.present();
+    // const settings = await modal.onWillDismiss();
+    // if( settings.data ) {
+    //   this.settingsSvc.settings.searchSettings = <any>settings.data;
+    //   await this.settingsSvc.save()
+    //   await this.refresh();
+    // }
   }
 }

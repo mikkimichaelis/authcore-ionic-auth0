@@ -12,5 +12,7 @@ export interface IAuthService {
 
     signOut(): Promise<any>;
     getUiConfig(platform: Platform): any;
+
+    handleLoginCallback();
 }
     

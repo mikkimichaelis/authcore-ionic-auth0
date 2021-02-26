@@ -44,7 +44,10 @@ import { AuthGuard, FeatureGuard } from './guards';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CallbackComponent } from './callback.component';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent, 
+    CallbackComponent
+  ],
   entryComponents: [],
   imports: [
     SharedModule,
@@ -66,6 +69,7 @@ import { CallbackComponent } from './callback.component';
     HttpClientModule
     ],
   providers: [
+    AuthService,
     SafariViewController,    
     InAppBrowser,
     StatusBar,

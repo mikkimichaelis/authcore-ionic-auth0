@@ -58,25 +58,25 @@ export class SearchPage implements OnInit {
   }
 
   async presentSettings() {
-    if( (<any>this)._infoWindow ) { 
-      (<any>this)._infoWindow.close(); 
-      (<any>this)._infoWindow = null; 
-    }
+    // if( (<any>this)._infoWindow ) { 
+    //   (<any>this)._infoWindow.close(); 
+    //   (<any>this)._infoWindow = null; 
+    // }
     
-    const modal = await this.modalController.create({
-      component: SearchSettingsPage,
-      cssClass: 'search-options-class',
-      componentProps: { input: this.settingsService.settings.searchSettings },
-      swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl
-    });
-    const rv: any =  await modal.present();
-    const settings = await modal.onWillDismiss();
-    if( settings.data ) {
-      this.settingsService.settings.searchSettings = <any>settings.data;
-      await this.settingsService.save()
-      await this.refresh();
-    }
+    // const modal = await this.modalController.create({
+    //   component: SearchSettingsPage,
+    //   cssClass: 'search-options-class',
+    //   componentProps: { input: this.settingsService.settings.searchSettings },
+    //   swipeToClose: true,
+    //   presentingElement: this.routerOutlet.nativeEl
+    // });
+    // const rv: any =  await modal.present();
+    // const settings = await modal.onWillDismiss();
+    // if( settings.data ) {
+    //   this.settingsService.settings.searchSettings = <any>settings.data;
+    //   await this.settingsService.save()
+    //   await this.refresh();
+    // }
   }
 
   isFavorite(meeting: Meeting): boolean {
@@ -106,21 +106,21 @@ export class SearchPage implements OnInit {
   }
 
   async presentHelp() {    
-    const modal = await this.modalController.create({
-      mode: this.settingsService.environment.design,
-      component: SearchHelpPage,
-      //cssClass: 'search-help-class',
-      //componentProps: { input: this.settingsService.settings.searchSettings },
-      swipeToClose: true,
-      backdropDismiss: true,
-      presentingElement: this.routerOutlet.nativeEl
-    });
-    const rv: any =  await modal.present();
-    const result = await modal.onWillDismiss();
-    if( result.data ) {
-      this.settingsService.settings.searchSettings.showHelp = <any>result.data;
-      await this.settingsService.save()
-      await this.refresh();
-    }
+    // const modal = await this.modalController.create({
+    //   mode: this.settingsService.environment.design,
+    //   component: SearchHelpPage,
+    //   //cssClass: 'search-help-class',
+    //   //componentProps: { input: this.settingsService.settings.searchSettings },
+    //   swipeToClose: true,
+    //   backdropDismiss: true,
+    //   // presentingElement: this.routerOutlet.nativeEl  // TODO FIX!
+    // });
+    // const rv: any =  await modal.present();
+    // const result = await modal.onWillDismiss();
+    // if( result.data ) {
+    //   this.settingsService.settings.searchSettings.showHelp = <any>result.data;
+    //   await this.settingsService.save()
+    //   await this.refresh();
+    // }
   }
 }

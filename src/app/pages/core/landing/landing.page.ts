@@ -1,11 +1,11 @@
 
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 
 import { from, interval, Observable, of, pipe, Subscription } from 'rxjs';
 import { concatMap, delay, map, take } from 'rxjs/operators';
-import { AuthService } from 'src/app/services';
+import { IAuthService, AUTH_SERVICE, BUSY_SERVICE, IBusyService } from 'src/app/services';
 import { BusyService } from 'src/app/services/busy.service';
 
 @Component({
@@ -16,8 +16,8 @@ import { BusyService } from 'src/app/services/busy.service';
 export class LandingPage {
   constructor(
     private route: ActivatedRoute, 
-    private busySvc: BusyService, 
-    private authService: AuthService) {
+    @Inject(BUSY_SERVICE) private busySvc: IBusyService, 
+    @Inject(AUTH_SERVICE) private authService: IAuthService) {
   }
 
   ngOnInit() {}

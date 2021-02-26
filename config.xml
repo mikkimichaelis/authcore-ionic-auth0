@@ -21,7 +21,15 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <platform name="android">
+        <implementation name="androidx.multidex:multidex" value="2.0.0" />
+        <implementation name="androidx.recyclerview:recyclerview" value="1.0.0" />
+        <implementation name="androidx.appcompat:appcompat" value="1.0.0" />
+        <implementation name="androidx.constraintlayout" value="constraintlayout:1.1.3" />
+        <implementation name="com.google.android.material:material" value="1.0.0-rc01" />
         <preference name="android-minSdkVersion" value="22" />
+        <preference name="compileSdkVersion" value="29" />
+        <preference name="buildToolsVersion" value="29" />
+        <preference name="minSdkVersion" value="22" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
         </edit-config>
@@ -100,8 +108,8 @@
         <splash height="1792" src="resources/ios/splash/Default-1792h~iphone.png" width="828" />
         <splash height="828" src="resources/ios/splash/Default-Landscape-1792h~iphone.png" width="1792" />
     </platform>
-    <engine name="android" spec="^8.1.0" />
     <engine name="ios" spec="^5.1.1" />
+    <engine name="android" spec="^9.0.0" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
@@ -110,6 +118,10 @@
         <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
     </plugin>
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
+    <plugin name="cordova-plugin-buildinfo" spec="4.0.0" />
+    <plugin name="cordova-plugin-browsertab" spec="0.2.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
     <plugin name="cordova-plugin-safariviewcontroller" spec="^1.6.0" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.4.0">
         <variable name="URL_SCHEME" value="com.auth0.ionic" />
@@ -117,5 +129,14 @@
         <variable name="ANDROID_HOST" value="aluque.auth0.com" />
         <variable name="ANDROID_PATHPREFIX" value="/cordova/com.auth0.ionic/callback" />
     </plugin>
-    <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
+    <plugin name="cordova-plugin-androidx" spec="^3.0.0" />
+    <plugin name="cordova-plugin-androidx-adapter" spec="^1.1.3" />
+    <plugin name="cordova.plugin.zoom" spec="^4.6.2166-6.603" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^6.0.3">
+        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+    </plugin>
+    <plugin name="cordova-plugin-email-composer" spec="^0.9.2">
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
+    </plugin>
 </widget>

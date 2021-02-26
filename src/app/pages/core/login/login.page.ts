@@ -4,7 +4,7 @@ import firebase from 'firebase/app'
 import { from, of } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 import { Platform } from '@ionic/angular';
-import { AuthService, AUTH_SERVICE, IAuthService } from 'src/app/services';
+import { AUTH_SERVICE, IAuthService } from 'src/app/services';
 
 @Component({
   selector: 'app-login',

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../services';
+import { Component, Inject } from '@angular/core';
+import { AUTH_SERVICE, IAuthService } from '../services';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +9,7 @@ import { AuthService } from '../services';
 export class HomePage {
 
   constructor(
-    public auth: AuthService
+    @Inject(AUTH_SERVICE) public auth: IAuthService
   ) {}
 
 }
