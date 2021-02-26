@@ -2,23 +2,23 @@ import { Injectable, NgZone } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
-// Import AUTH_CONFIG, Auth0Cordova, and auth0.js
-import { AUTH_CONFIG } from './auth.config';
+import { CORDOVA_CONFIG, WEB_CONFIG} from './auth.config';
 import Auth0Cordova from '@auth0/cordova';
 import * as auth0 from 'auth0-js';
+
 import { of, Subscription, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 declare let cordova: any;
-
 @Injectable()
 export class AuthService {
-  Auth0 = new auth0.WebAuth(AUTH_CONFIG);
-  Client = new Auth0Cordova(AUTH_CONFIG);
+  Auth0 = new auth0.WebAuth(CORDOVA_CONFIG);  // TODO WEB_CONFIG
+  Client = new Auth0Cordova(CORDOVA_CONFIG);
 
   options = {
     responseType: 'token',

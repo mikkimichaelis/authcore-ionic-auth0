@@ -34,10 +34,11 @@ import { Zoom } from '@ionic-native/zoom/ngx';
 
 // import { TranslateUniversalLoader } from './utils/translateuniversalloader';
 
-import { AuthService } from './services/auth.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { CallbackComponent } from './callback.component';
+
+import { AuthService } from './services';
 
 @NgModule({
   declarations: [

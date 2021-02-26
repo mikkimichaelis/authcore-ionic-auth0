@@ -7,18 +7,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
-import { AUTH_CONFIG } from './auth.config';
+import { WEB_CONFIG } from './auth.config';
 
 @Injectable()
 export class AuthService {
   // Create Auth0 web auth instance
   private Auth0 = new auth0.WebAuth({
-    clientID: environment.auth.clientId,
-    domain: environment.auth.clientDomain,
+    clientID: WEB_CONFIG.auth.clientId,
+    domain: WEB_CONFIG.auth.clientDomain,
     responseType: 'token',
-    redirectUri: environment.auth.redirect,
-    audience: environment.auth.audience,
-    scope: environment.auth.scope
+    redirectUri: WEB_CONFIG.auth.redirect,
+    audience: WEB_CONFIG.auth.audience,
+    scope: WEB_CONFIG.auth.scope
   });
   accessToken: string;
   user: any;
@@ -125,7 +125,7 @@ export class AuthService {
     }
     const getToken$ = () => {
       return this.http
-        .get(`${environment.apiAuthTokenExchange}auth/firebase`, {
+        .get(`${WEB_CONFIG.apiAuthTokenExchange}auth/firebase`, {
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`)
         });
     };
