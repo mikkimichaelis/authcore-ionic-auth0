@@ -18,11 +18,11 @@ export const environment = {
   },
   apiAuthTokenExchange: "https://meetingmakerapp.uc.r.appspot.com/",
   auth: {
-    clientId: "",
-    clientDomain: "",
-    redirect: "",
-    audience: "",
-    scope: ""
+    clientId: '7YxQMN7qkcuemrbrYa1nR3RK8DBAQnIW',
+    clientDomain: 'meetingmaker.us.auth0.com', // e.g., you.auth0.com
+    audience: 'https://meetingmakerapp.uc.r.appspot.com', // e.g., http://localhost:1337/
+    redirect: 'http://localhost:8100/callback',
+    scope: 'openid profile email'
   },
   googleCloudConfig: {
     agmKey: 'AIzaSyA4K1sIU-SOJkrOHTc3BzHurvTkg9N4Uf8'

@@ -37,8 +37,13 @@ import { Zoom } from '@ionic-native/zoom/ngx';
 import { AuthService } from './services/auth.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+import { CallbackComponent } from './callback.component';
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent, 
+    CallbackComponent
+  ],
   entryComponents: [],
   imports: [
     AppRoutingModule,
@@ -72,7 +77,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     TranslateService,
     AngularFireAuth,
     HttpClient,
-    Zoom
+    Zoom,
+    CallbackComponent
   ],
   bootstrap: [AppComponent]
 })
