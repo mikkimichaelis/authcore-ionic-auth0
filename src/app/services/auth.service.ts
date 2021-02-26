@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
+import { AUTH_CONFIG } from './auth.config'; 
 
 @Injectable()
 export class AuthService {
@@ -52,7 +53,7 @@ export class AuthService {
     // Ensure all auth items removed
     this.storage.remove('expires_at');
     this.storage.remove('auth_redirect');
-    window.location.href = `https://${environment.auth.clientDomain}/v2/logout?returnTo=${encodeURIComponent(environment.auth.redirect)}`;
+    window.location.href = `https://${environment.auth.clientDomain}/v2/logout?client_id=${AUTH_CONFIG.clientID}&returnTo=${encodeURIComponent(environment.auth.redirect)}`;
     this.accessToken = undefined;
     this.userProfile = undefined;
     this.loggedIn = false;
@@ -73,10 +74,12 @@ export class AuthService {
         this.accessToken = authResult.accessToken;
         // Get user info: set up session, get Firebase token
         this.getUserInfo(authResult);
-      } else if (err) {
+      } else {
+        if (err) {
+          console.error(`Error authenticating: ${err.error}`);
+        }
         this.router.navigate(['/']);
         this.loading = false;
-        console.error(`Error authenticating: ${err.error}`);
       }
     });
   }
