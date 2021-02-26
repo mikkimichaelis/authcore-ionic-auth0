@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
 import firebase from 'firebase/app'
 import { from, of } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 import { Platform } from '@ionic/angular';
-import * as firebaseui from 'firebaseui';
+import { AuthService, AUTH_SERVICE, IAuthService } from 'src/app/services';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +13,10 @@ import * as firebaseui from 'firebaseui';
 })
 export class LoginPage {
 
-  constructor(private platform: Platform, private route: ActivatedRoute, private authService: AuthService) { }
+  constructor(
+    private platform: Platform, 
+    private route: ActivatedRoute, 
+    @Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   async ionViewWillEnter() {
     // https://github.com/firebase/firebaseui-web/issues/559
@@ -23,8 +25,8 @@ export class LoginPage {
       await this.authService.signOut();
     }
 
-    console.log(`this.firebaseUi.start('${await this.platform.ready()}')`);
-    await this.authService.firebaseUi.start('#firebaseui-auth-container', this.authService.getUiConfig(this.platform));
+    // console.log(`this.firebaseUi.start('${await this.platform.ready()}')`);
+    // await this.authService.firebaseUi.start('#firebaseui-auth-container', this.authService.getUiConfig(this.platform));
   }
 
   ionViewWillLeave() {

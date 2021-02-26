@@ -5,8 +5,8 @@ import { LoadingController } from '@ionic/angular';
 
 import { from, interval, Observable, of, pipe, Subscription } from 'rxjs';
 import { concatMap, delay, map, take } from 'rxjs/operators';
+import { AuthService } from 'src/app/services';
 import { BusyService } from 'src/app/services/busy.service';
-import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-landing',

@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
 
 export interface IAuthService {
-    firebaseUi: firebaseui.auth.AuthUI;
+    firebaseUi: any; // firebaseui.auth.AuthUI;
 
     auth: firebase.auth.Auth;
     authUser: firebase.User;

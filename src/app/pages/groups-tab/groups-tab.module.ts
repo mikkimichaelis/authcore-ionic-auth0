@@ -8,13 +8,11 @@ import { FavoritesPage } from './favorites/favorites.page';
 import { SearchPage } from './search/search.page';
 import { MapPage } from './search/map/map.page';
 import { SearchSettingsPage } from './search/search-settings/search-settings.page';
-import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   imports: [
     SharedModule,
-    GroupsTabPageRoutingModule,
-    AgmCoreModule
+    GroupsTabPageRoutingModule
   ],
   declarations: [
     GroupsTabPage,

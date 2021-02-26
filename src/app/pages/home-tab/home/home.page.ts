@@ -5,14 +5,13 @@ import { BusyService } from '../../../services/busy.service';
 import { UserService } from '../../../services/user.service';
 import { GroupsService } from '../../../services/groups.service';
 
-import { StreamChat, ChannelData, Message, User } from 'stream-chat';
 import axios from 'axios';
 import { BehaviorSubject, Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { IMeeting, IUserFriend, Meeting } from 'src/shared/models';
 import { AUTH_SERVICE, BUSY_SERVICE, DATA_SERVICE, IAuthService, IBusyService, IDataService, IMeetingService, IToastService, IUserService, MEETING_SERVICE, TOAST_SERVICE, USER_SERVICE, ZoomService } from 'src/app/services';
 import { ModalController, NavController } from '@ionic/angular';
 import { ViewPage } from '../../meetings-tab/view/view.page';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { subscribeOn } from 'rxjs/operators';
 
@@ -51,7 +50,7 @@ export class HomePage {
 
   _userSubscription: Subscription;
   _liveMeetingsSubscription: Subscription;
-  _liveMeetingsRefreshInterval: NodeJS.Timeout;
+  _liveMeetingsRefreshInterval: any; // NodeJS.Timeout;
   async subscribe() {
     // TODO move to meeting service
     this._userSubscription = this.userService.user$.subscribe(user => {

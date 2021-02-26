@@ -28,7 +28,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireFunctions, AngularFireFunctionsModule, USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
+import { AngularFireFunctions, AngularFireFunctionsModule } from '@angular/fire/functions'; // USE_EMULATOR as USE_FUNCTIONS_EMULATOR
 
 import { FirestoreService } from './services/firestore.service';
 
@@ -81,7 +81,7 @@ import { CallbackComponent } from './callback.component';
     FeatureGuard,
     Zoom,
     CallbackComponent,
-    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.firebaseConfig.useEmulators ? ['localhost', 5001] : undefined },
+    // { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.firebaseConfig.useEmulators ? ['localhost', 5001] : undefined },
     { provide: FIRESTORE_SERVICE, useExisting: FirestoreService},
     { provide: ANGULAR_FIRE_FUNCTIONS, useExisting: AngularFireFunctions },
     { provide: DATA_SERVICE, useExisting: DataService},

@@ -21,7 +21,7 @@
     "@angular/cdk": "^8.0.0",
     "@angular/common": "^8.2.9",
     "@angular/core": "^8.2.9",
-    "@angular/fire": "^5.2.0",
+    "@angular/fire": "^5.2.3",
     "@angular/forms": "^8.2.9",
     "@angular/platform-browser": "^8.2.9",
     "@angular/platform-browser-dynamic": "^8.2.9",
@@ -34,10 +34,9 @@
     "@ionic-native/social-sharing": "^5.14.0",
     "@ionic-native/splash-screen": "^5.14.0",
     "@ionic-native/status-bar": "^5.14.0",
-    
     "@ionic-native/zoom": "^5.31.1",
     "@ionic/angular": "^5.1.0",
-    "@ionic/storage": "^2.3.1",
+    "@ionic/storage": "^2.2.0",
     "@ngx-translate/core": "^12.0.0",
     "@ngx-translate/http-loader": "^4.0.0",
     "auth0-js": "^9.14.3",
@@ -54,10 +53,11 @@
     "cordova-plugin-safariviewcontroller": "^1.6.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
+    
     "cordova-universal-links-plugin": "~1.2.1",
     "cordova-plugin-whitelist": "1.3.3",
     "core-js": "^2.5.4",
-    "firebase": "^8.1.2",
+    "firebase": "^7.0.0",
     "firestore": "^1.1.6",
     "geofirex": "file:../geofirex",
     "leaflet": "^1.6.0",
@@ -111,7 +111,7 @@
     "cordova-plugin-safariviewcontroller": "^1.6.0",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-statusbar": "2.4.2",
-    "cordova-plugin-whitelist": "1.3.3",    
+    "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-x-socialsharing": "^6.0.3",
     "cordova.plugin.zoom": "^4.6.2166-6.603",
     "es6-promise-plugin": "^4.2.2",
@@ -127,7 +127,7 @@
     "puppeteer": "^1.20.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.5"
+    "typescript": "~3.5.0"
   },
   "description": "MeetingMaker",
   "cordova": {
