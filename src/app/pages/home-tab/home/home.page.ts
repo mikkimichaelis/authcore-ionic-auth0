@@ -107,7 +107,7 @@ export class HomePage {
   };
   share() {
     //this.socialSharing.shareWithOptions(this.options);
-    this.socialSharing.share("Open WhitsApp", "WhitsApp Recovery Meetings", [], `https://anonymousmeetings.us/assets/pages/download.html`);
+    this.socialSharing.share("Open MeetingMaker", "MeetingMaker Recovery Meetings", [], `https://meetingmaker.live/assets/pages/download.html`);
   }
 
   daysSober() {

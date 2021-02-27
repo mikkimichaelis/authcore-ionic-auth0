@@ -30,7 +30,7 @@ export class SupportPage implements OnInit {
       //    'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
       //    'file://README.pdf'
       //  ],
-       subject: 'WhitsApp Support',
+       subject: 'MeetingMaker Support',
        body: '',
        isHtml: true
      };

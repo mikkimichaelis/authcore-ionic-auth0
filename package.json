@@ -1,8 +1,8 @@
 {
-  "name": "WhitsApp",
+  "name": "MeetingMaker",
   "version": "1.0.2",
   "author": "Psych Ward Software Inc.",
-  "homepage": "https://www.anonymousmeetings.us/",
+  "homepage": "https://www.meetingmaker.live/",
   "scripts": {
     "ng": "npx ng",
     "start": "npx ng serve",

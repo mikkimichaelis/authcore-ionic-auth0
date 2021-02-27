@@ -107,8 +107,8 @@ export class AuthService implements IAuthService {
         }
       },
       credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-      tosUrl: 'https://anonymousmeetings.us/assets/pages/tos.html',
-      privacyPolicyUrl: 'https://anonymousmeetings.us/assets/pages/privacy.html',
+      tosUrl: 'https://meetingmaker.live/assets/pages/tos.html',
+      privacyPolicyUrl: 'https://meetingmaker.live/assets/pages/privacy.html',
       //enableRedirectHandling: false,
       //signInSuccessUrl: '/core/landing',
       autoUpgradeAnonymousUsers: true,

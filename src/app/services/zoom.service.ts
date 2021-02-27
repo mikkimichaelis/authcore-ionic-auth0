@@ -56,6 +56,6 @@ export class ZoomService {
       no_button_leave: false
     };
     // Call join meeting method.
-    return this.zoomService.joinMeeting(meetingNumber, meetingPassword, `[WhitsApp] ${displayName}`, options);
+    return this.zoomService.joinMeeting(meetingNumber, meetingPassword, `[MeetingMaker] ${displayName}`, options);
   }
 }

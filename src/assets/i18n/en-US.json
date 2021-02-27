@@ -8,10 +8,10 @@
   "SATURDAY": "Saturday",
   "TITLE": {
     "ALPHABET": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "APP_NAME": "Whit's App",
+    "APP_NAME": "MeetingMaker",
     "ANONYMOUS": "Anonymous",
-    "ANONYMOUS.MEETINGS": "WhitsApp",
-    "ABOUT": "About WhitsApp",
+    "MEETING.MAKER": "MeetingMaker",
+    "ABOUT": "About MeetingMaker",
     "HOME": "Home",
     "WELCOME": "Welcome",
     "MESSAGES": "Messages",
