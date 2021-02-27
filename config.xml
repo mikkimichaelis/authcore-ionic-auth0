@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="live.meetingmaker.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>auth0-app</name>
-    <description>An awesome Ionic/Cordova app.</description>
+    <name>MeetingMaker</name>
+    <description>Make 12 Step Meetings</description>
     <author email="dev@meetingmaker.live" href="http://www.meetingmaker.live/">Psych Ward Software Inc.</author>
     <content src="index.html" />
     <access origin="*" />
@@ -126,7 +126,7 @@
     <plugin name="cordova-plugin-customurlscheme" spec="^4.4.0">
         <variable name="URL_SCHEME" value="live.meetingmaker.app" />
         <variable name="ANDROID_SCHEME" value="live.meetingmaker.app" />
-        <variable name="ANDROID_HOST" value="mikki.auth0.com" />
+        <variable name="ANDROID_HOST" value="meetingmaker.us.auth0.com" />
         <variable name="ANDROID_PATHPREFIX" value="/cordova/live.meetingmaker.app/callback" />
     </plugin>
     <plugin name="cordova-plugin-androidx" spec="^3.0.0" />

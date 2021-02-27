@@ -134,7 +134,7 @@
       "cordova-plugin-customurlscheme": {
         "URL_SCHEME": "live.meetingmaker.app",
         "ANDROID_SCHEME": "live.meetingmaker.app",
-        "ANDROID_HOST": "mikki.auth0.com",
+        "ANDROID_HOST": "meetingmaker.us.auth0.com",
         "ANDROID_PATHPREFIX": "/cordova/live.meetingmaker.app/callback"
       },
       "cordova-plugin-androidx": {},
