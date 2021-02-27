@@ -43,6 +43,8 @@ import { GroupService, GroupsService, UserService, AuthService, BusyService, Set
 import { AuthGuard, FeatureGuard } from './guards';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CallbackComponent } from './callback.component';
+
+import { FIREBASE_CONFIG } from '../private/private.config';
 @NgModule({
   declarations: [
     AppComponent, 
@@ -61,7 +63,7 @@ import { CallbackComponent } from './callback.component';
         useClass: TranslateUniversalLoader
       }
     }),
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireFunctionsModule,
     AngularFirestoreModule,     // TODO AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,

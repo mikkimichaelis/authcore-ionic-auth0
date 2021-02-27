@@ -7,18 +7,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
-import { WEB_CONFIG } from './auth.config';
+import { WEB_AUTH_CONFIG } from '../../private/private.config';
 
 @Injectable()
 export class AuthService {
   // Create Auth0 web auth instance
   private Auth0 = new auth0.WebAuth({
-    clientID: WEB_CONFIG.auth.clientId,
-    domain: WEB_CONFIG.auth.clientDomain,
+    clientID: WEB_AUTH_CONFIG.auth.clientId,
+    domain: WEB_AUTH_CONFIG.auth.clientDomain,
     responseType: 'token',
-    redirectUri: WEB_CONFIG.auth.redirect,
-    audience: WEB_CONFIG.auth.audience,
-    scope: WEB_CONFIG.auth.scope
+    redirectUri: WEB_AUTH_CONFIG.auth.redirect,
+    audience: WEB_AUTH_CONFIG.auth.audience,
+    scope: WEB_AUTH_CONFIG.auth.scope
   });
   accessToken: string;
   user: any;
@@ -53,7 +53,7 @@ export class AuthService {
     // Ensure all auth items removed
     this.storage.remove('expires_at');
     this.storage.remove('auth_redirect');
-    window.location.href = `https://${WEB_CONFIG.auth.clientDomain}/v2/logout?client_id=${WEB_CONFIG.auth.clientId}&returnTo=${encodeURIComponent(WEB_CONFIG.auth.redirect)}`;
+    window.location.href = `https://${WEB_AUTH_CONFIG.auth.clientDomain}/v2/logout?client_id=${WEB_AUTH_CONFIG.auth.clientId}&returnTo=${encodeURIComponent(WEB_AUTH_CONFIG.auth.redirect)}`;
     this.accessToken = undefined;
     this.userProfile = undefined;
     this.isAuthenticated = false;
@@ -125,7 +125,7 @@ export class AuthService {
     }
     const getToken$ = () => {
       return this.http
-        .get(`${WEB_CONFIG.apiAuthTokenExchange}auth/firebase`, {
+        .get(`${WEB_AUTH_CONFIG.apiAuthTokenExchange}auth/firebase`, {
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`)
         });
     };

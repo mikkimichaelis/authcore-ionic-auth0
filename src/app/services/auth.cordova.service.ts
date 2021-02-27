@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
-import { CORDOVA_CONFIG, WEB_CONFIG} from './auth.config';
+import { CORDOVA_AUTH_CONFIG, WEB_AUTH_CONFIG} from '../../private/private.config';
 import Auth0Cordova from '@auth0/cordova';
 import * as auth0 from 'auth0-js';
 
@@ -34,8 +34,8 @@ export class AuthService {
   private firebaseTokenSub: Subscription;
   private refreshFirebaseTokenSub: Subscription;
 
-  private Auth0 = new auth0.WebAuth(CORDOVA_CONFIG);  // TODO WEB_CONFIG
-  private Client = new Auth0Cordova(CORDOVA_CONFIG);
+  private Auth0 = new auth0.WebAuth(CORDOVA_AUTH_CONFIG);  // TODO WEB_AUTH_CONFIG
+  private Client = new Auth0Cordova(CORDOVA_AUTH_CONFIG);
 
   constructor(
     public zone: NgZone,
@@ -92,9 +92,9 @@ export class AuthService {
     this.isAuthenticated = false;
     this.safariViewController.isAvailable()
       .then((available: boolean) => {
-        const auth0Domain = CORDOVA_CONFIG.domain;
-        const clientId = CORDOVA_CONFIG.clientId;
-        const pkgId = CORDOVA_CONFIG.packageIdentifier;
+        const auth0Domain = CORDOVA_AUTH_CONFIG.domain;
+        const clientId = CORDOVA_AUTH_CONFIG.clientId;
+        const pkgId = CORDOVA_AUTH_CONFIG.packageIdentifier;
         let url = `https://${auth0Domain}/v2/logout?client_id=${clientId}&returnTo=${pkgId}://${auth0Domain}/cordova/${pkgId}/callback`;
         if (available) {
           this.safariViewController.show({
@@ -164,7 +164,7 @@ export class AuthService {
     // }
     const getToken$ = () => {
       return this.http
-        .get(`${WEB_CONFIG.apiAuthTokenExchange}auth/firebase`, {
+        .get(`${WEB_AUTH_CONFIG.apiAuthTokenExchange}auth/firebase`, {
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.accessToken}`)
         });
     };

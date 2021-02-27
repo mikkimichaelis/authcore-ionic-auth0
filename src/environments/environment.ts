@@ -5,24 +5,6 @@
 export const environment = {
   production: false,
   design: "ios",      // "md"
-  firebaseConfig: {
-    apiKey: "AIzaSyDTB6TRgJNOHvuq_L0YxNHSRufJx36y6dk",
-    authDomain: "anonymousmeetings.firebaseapp.com",
-    databaseURL: "https://anonymousmeetings.firebaseio.com",
-    projectId: "anonymousmeetings",
-    storageBucket: "anonymousmeetings.appspot.com",
-    messagingSenderId: "743896601158",
-    appId: "1:743896601158:web:460244580c9f6cdaaab047",
-    measurementId: "G-KJRD16EWZ5",
-    useEmulators: false
-  },
-  googleCloudConfig: {
-    agmKey: 'AIzaSyA4K1sIU-SOJkrOHTc3BzHurvTkg9N4Uf8'
-  },
-  logRocketConfig: {
-    appID: 'tdzfnj/anonymous-meetings',
-    options: {}
-  },
   getUserRetry: 10,
   getUserDelay: 500,
   busyTimeoutDuration: 10000,
