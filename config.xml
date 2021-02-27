@@ -124,10 +124,10 @@
     <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
     <plugin name="cordova-plugin-safariviewcontroller" spec="^1.6.0" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.4.0">
-        <variable name="URL_SCHEME" value="com.auth0.ionic" />
-        <variable name="ANDROID_SCHEME" value="com.auth0.ionic" />
-        <variable name="ANDROID_HOST" value="aluque.auth0.com" />
-        <variable name="ANDROID_PATHPREFIX" value="/cordova/com.auth0.ionic/callback" />
+        <variable name="URL_SCHEME" value="live.meetingmaker.app" />
+        <variable name="ANDROID_SCHEME" value="live.meetingmaker.app" />
+        <variable name="ANDROID_HOST" value="mikki.auth0.com" />
+        <variable name="ANDROID_PATHPREFIX" value="/cordova/live.meetingmaker.app/callback" />
     </plugin>
     <plugin name="cordova-plugin-androidx" spec="^3.0.0" />
     <plugin name="cordova-plugin-androidx-adapter" spec="^1.1.3" />

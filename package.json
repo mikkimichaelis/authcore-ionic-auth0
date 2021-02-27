@@ -132,10 +132,10 @@
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-safariviewcontroller": {},
       "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "com.auth0.ionic",
-        "ANDROID_SCHEME": "com.auth0.ionic",
-        "ANDROID_HOST": "aluque.auth0.com",
-        "ANDROID_PATHPREFIX": "/cordova/com.auth0.ionic/callback"
+        "URL_SCHEME": "live.meetingmaker.app",
+        "ANDROID_SCHEME": "live.meetingmaker.app",
+        "ANDROID_HOST": "mikki.auth0.com",
+        "ANDROID_PATHPREFIX": "/cordova/live.meetingmaker.app/callback"
       },
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
