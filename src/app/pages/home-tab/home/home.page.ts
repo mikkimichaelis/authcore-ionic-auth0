@@ -37,12 +37,12 @@ export class HomePage {
   }
 
   ngOnInit() {
+    this.subscribe();
     this.dataService.logout$.subscribe(logout => {
       if (logout) {
         this.unsubscribe();
       }
     });
-    this.subscribe();
   }
 
   _userSubscription: Subscription;

@@ -46,7 +46,6 @@ export class UserService implements IUserService {
     this.dataService.fireUser$.subscribe(async (fireUser) => {
       if (fireUser !== null) {
         await this.getUser(fireUser.uid);
-        this.dataService.user$.next()
       }
     });
   }

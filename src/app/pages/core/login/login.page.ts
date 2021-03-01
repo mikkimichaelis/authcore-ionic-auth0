@@ -1,9 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import firebase from 'firebase/app'
-import { from, of } from 'rxjs';
-import { concatMap, delay } from 'rxjs/operators';
-import { Platform } from '@ionic/angular';
+import { Component, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AUTH_SERVICE, IAuthService } from 'src/app/services';
 
 @Component({
@@ -14,22 +10,19 @@ import { AUTH_SERVICE, IAuthService } from 'src/app/services';
 export class LoginPage {
 
   constructor(
-    private platform: Platform, 
     private route: ActivatedRoute, 
     @Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   async ionViewWillEnter() {
-    // https://github.com/firebase/firebaseui-web/issues/559
-
     if (this.route.snapshot.queryParamMap.get('signOut')) {
       await this.authService.signOut();
     }
 
-    // console.log(`this.firebaseUi.start('${await this.platform.ready()}')`);
-    // await this.authService.firebaseUi.start('#firebaseui-auth-container', this.authService.getUiConfig(this.platform));
+    console.log(`loginPage.ionViewWillEnter(${window.location.href})`);
+    if (this.route.snapshot.queryParamMap.get('redirect')) {
+      await this.authService.setAuthRedirect(this.route.snapshot.queryParamMap.get('redirect'));
+    }
   }
 
-  ionViewWillLeave() {
-    console.log(`LoginPage.ionViewWillLeave()`);
-  }
+  ionViewWillLeave() {}
 }

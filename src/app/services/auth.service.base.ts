@@ -22,13 +22,9 @@ import { CORDOVA_AUTH_CONFIG, WEB_AUTH_CONFIG } from '../../private/private.conf
   providedIn: 'root'
 })
 export class AuthServiceBase implements IAuthServiceBase {
-
-  initialized$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
-
   public webAuth0 = new Auth0.WebAuth(WEB_AUTH_CONFIG.auth)
 
   loading: boolean;
-  
   expiresAt: number = 0;
 
   options = {
@@ -50,7 +46,7 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set authToken(authToken) {
     this._authToken = authToken;
-    this._storage.set('authToken', authToken)
+    // this._storage.set('authToken', authToken)
   }
 
   _authUser: any = null;
@@ -59,7 +55,7 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set authUser(authUser) {
     this._authUser = authUser;
-    this._storage.set('authUser', authUser)
+    // this._storage.set('authUser', authUser)
   }
 
   _fireToken: string = null;
@@ -68,7 +64,7 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set fireToken(fireToken) {
     this._fireToken = fireToken;
-    this._storage.set('fireToken', fireToken);
+    // this._storage.set('fireToken', fireToken);
   }
 
   _fireUser: firebase.User = null;
@@ -78,7 +74,8 @@ export class AuthServiceBase implements IAuthServiceBase {
   set fireUser(fireUser) {
     this._fireUser = fireUser;
     this._dataService.fireUser$.next(fireUser);
-    this._storage.set('fireUser', fireUser);
+    // this._storage.set('fireUser', fireUser);
+    this._dataService.authenticated$.next(fireUser != null);
   }
   
   private afAuthStateSub: Subscription;
@@ -105,9 +102,9 @@ export class AuthServiceBase implements IAuthServiceBase {
     this.fireAuthStateSubscribe();
   }
 
-  public async initialize(auth: boolean) {
-    await this.getSession();
-    this.initialized$.next(true);
+  public async initialize() {
+    // await this.getSession();
+    // this.initialized$.next(true);
   }
 
   public async processAuthResult(authResult) {
@@ -163,11 +160,10 @@ export class AuthServiceBase implements IAuthServiceBase {
       this._afAuth.auth.signInWithCustomToken(fireToken)
         .then(async response => {
           if (response.additionalUserInfo.isNewUser) {
-            await this._userService.createUser(response.user);
-            this.fireUser = response.user;
-          } else {
-            this.fireUser = response.user;
+            await this._userService.createUser(response.user); 
           }
+          this.fireUser = response.user;
+
           this.scheduleCustomTokenRenewal();
           resolve(true);
         })
@@ -192,36 +188,41 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
 
   public setSession() {
-    this._storage.set('authUser', this.authUser)
-    this._storage.set('authToken', this.authToken)
-    this._storage.set('fireUser', this.fireUser);
-    this._storage.set('fireToken', this.fireToken);
+    // this._storage.set('authUser', this.authUser)
+    // this._storage.set('authToken', this.authToken)
+    // this._storage.set('fireUser', this.fireUser);
+    // this._storage.set('fireToken', this.fireToken);
   }
 
   async getSession() {
-    const session = [];
-    session.push(this._storage.get('authUser').then(authUser => this.authUser = authUser));
-    session.push(this._storage.get('authToken').then(authToken => this.authToken = authToken));
-    session.push(this._storage.get('fireUser').then(fireUser => this.fireUser = fireUser));
-    session.push(this._storage.get('fireToken').then(fireToken => this.fireToken = fireToken));
-    await Promise.all(session);
-    console.log(`session loaded authToken: ${this.authToken !== null} authUser: ${this.authUser !== null } fireToken: ${this.fireToken !== null} fireUser:${this.fireUser !== null}`)
+    // const session = [];
+    // session.push(this._storage.get('authUser').then(authUser => this.authUser = authUser));
+    // session.push(this._storage.get('authToken').then(authToken => this.authToken = authToken));
+    // session.push(this._storage.get('fireUser').then(fireUser => this.fireUser = fireUser));
+    // session.push(this._storage.get('fireToken').then(fireToken => this.fireToken = fireToken));
+    // await Promise.all(session);
+    // console.log(`session loaded authToken: ${this.authToken !== null} authUser: ${this.authUser !== null } fireToken: ${this.fireToken !== null} fireUser:${this.fireUser !== null}`)
   }
 
-  setAuthRedirect(redirect: string) {
-    const _redirect = redirect ? redirect : this._router.url;
-    this._storage.set('authRedirect', _redirect);
+  async setAuthRedirect(redirect: string) {
+    redirect = redirect ? redirect : window.location.pathname;
+    if (redirect === '/core/login' || redirect === '/callback') return;
+    console.log(`[authRedirect]: ${redirect}`);
+    await this._storage.set('authRedirect', redirect);
   }
 
-  async redirect(url?: string): Promise<any> {
+  public async redirect(url?: string): Promise<any> {
     this._zone.run(() => this.loading = false);
     if (url) {
+      console.log(`authService.redirect(): ${window.location.pathname} -> url: ${url}`);
       this._router.navigateByUrl(url);
+      return Promise.resolve(true);
     } else {
-      return new Promise(async (resolve, reject) => {
-        await this._storage.get('authRedirect').then(authRedirect => {
-          if (authRedirect) {
-            this._router.navigateByUrl(authRedirect);
+      return new Promise((resolve, reject) => {
+        this._storage.get('authRedirect').then(redirect => {
+          if (redirect) {
+            console.log(`authService.redirect(): ${window.location.pathname} -> redirect: ${redirect}`);
+            this._router.navigateByUrl(redirect);
             resolve(true);
           } else {
             resolve(false);
@@ -260,10 +261,12 @@ export class AuthServiceBase implements IAuthServiceBase {
     this.refreshFireTokenSub = expiresIn$
       .subscribe(
         () => {
-          console.log('Firebase token expired; fetching a new one');
+          console.log('scheduleCustomTokenRenewal; fetching a new one');
           this.getFirebaseToken(this.authToken);
         }
       );
+
+      console.log(`scheduleCustomTokenRenewal: ${(new Date(expiresAt)).toLocaleString()}`);
   }
 
   unscheduleCustomTokenRenewal() {
@@ -278,8 +281,8 @@ export class AuthServiceBase implements IAuthServiceBase {
 
     this.afAuthStateSub = this._afAuth.authState.subscribe(
       (user: firebase.User) => {
-        console.log(`firebaseAuth.authState(${user !== null})`);
-        this._dataService.fireUser$.next(user);
+        console.log(`fireAuthStateSubscribe.firebaseAuth.authState(${user !== null})`);
+        this.fireUser = user;
       },
       (error: any) => {
         console.error(error);

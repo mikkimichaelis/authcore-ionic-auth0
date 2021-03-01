@@ -4,7 +4,7 @@ import { AUTH_SERVICE, IAuthService } from './services';
 @Component({
   selector: 'app-callback',
   template: `
-    callback
+    Loading...
   `
 })
 export class CallbackComponent implements OnInit {
@@ -12,15 +12,6 @@ export class CallbackComponent implements OnInit {
   constructor(@Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   ngOnInit() {
-    this.authService.initialized$.subscribe(init => {
-      if (init) {
-        console.log(`handleLoginCallback`);
-        this.authService.handleLoginCallback();
-      }
-    })
-  }
-
-  ionViewDidEnter() {
-    console.log(`callback`);
+    this.authService.handleLoginCallback();
   }
 }

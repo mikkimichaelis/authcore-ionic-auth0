@@ -39,7 +39,7 @@ export class AuthService extends AuthServiceBase implements IAuthService {
 
   async signIn(redirect: string): Promise<any> {
     this.loading = true;
-    this.setAuthRedirect(redirect);
+    await this.setAuthRedirect(redirect);
     return new Promise((resolve, reject) => {
       this.auth0.authorize(this.options, async (error, authResult) => {
         if (!error && authResult) {

@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
 
 export interface IAuthServiceBase {
-    initialized$: ReplaySubject<boolean>;
+    // initialized$: ReplaySubject<boolean>;
 
     webAuth0: any;
 
@@ -27,7 +27,11 @@ export interface IAuthServiceBase {
 
     handleLoginCallback(): Promise<any>;
 
-    initialize(auth: boolean);
+    setAuthRedirect(url: string);
+
+    initialize();
+
+    redirect(url?: string): Promise<any>;
 }
 export interface IAuthService extends IAuthServiceBase {
 

@@ -37,9 +37,9 @@ export class AuthService extends AuthServiceBase implements IAuthService {
       dataService);
   }
 
-  signIn(redirect?: string): Promise<any> {
+  async signIn(redirect?: string): Promise<any> {
     this.loading = true;
-    this.setAuthRedirect(redirect);
+    await this.setAuthRedirect(redirect);
     this.webAuth0.authorize(this.options);
     return Promise.resolve(true);
   }
@@ -57,7 +57,7 @@ export class AuthService extends AuthServiceBase implements IAuthService {
             console.error(`Error authenticating: ${error.message}`);
           }
           this.zone.run(() => this.loading = false);
-          this.redirect('/');
+          this.redirect('/core/login');
         }
       });
     } catch (error) {

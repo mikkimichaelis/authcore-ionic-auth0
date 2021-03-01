@@ -3,6 +3,9 @@ import firebase from 'firebase/app';
 import { Meeting, User } from "src/shared/models";
 
 export interface IDataService {
+    hybrid: boolean;
+
+    authenticated$: ReplaySubject<boolean>;
     newUser$: Subject<any>;
     fireUser$: ReplaySubject<firebase.User>;
     user$: ReplaySubject<User>;
@@ -14,4 +17,8 @@ export interface IDataService {
     searchMeetings$: ReplaySubject<Meeting[]>;
 
     logout$: Subject<boolean>;
+
+    initialize(hybrid: boolean);
+
+    strings: any;
 }

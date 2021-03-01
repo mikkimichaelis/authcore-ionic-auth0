@@ -9,6 +9,10 @@ import { IDataService } from './data.service.interface';
 })
 export class DataService implements IDataService {
 
+  hybrid: boolean;
+
+  authenticated$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+
   newUser$: Subject<any> = new Subject<any>();
   fireUser$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1)
   user$: ReplaySubject<User> = new ReplaySubject<User>(1);
@@ -21,5 +25,12 @@ export class DataService implements IDataService {
 
   logout$: Subject<boolean> = new Subject<boolean>();
 
+  strings: any;
+
   constructor() { }
+
+  initialize(hybrid: boolean) {
+    this.strings = {};  // TODO persist these
+    this.hybrid = hybrid;
+  }
 }

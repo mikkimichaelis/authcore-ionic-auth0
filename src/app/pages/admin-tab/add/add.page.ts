@@ -34,7 +34,6 @@ export class AddPage implements OnInit {
   tags = ['Ionic', 'Angular', 'TypeScript'];
 
   constructor(
-    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
     private alertController: AlertController,

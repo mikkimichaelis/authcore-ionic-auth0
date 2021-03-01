@@ -6,8 +6,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Zoom } from '@ionic-native/zoom/ngx';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IInitializeService, IAuthService, IBusyService, IGroupsService, ISettingsService, IUserService, IGroupService, IMeetingService } from './';
-import { GROUP_SERVICE, USER_SERVICE, GROUPS_SERVICE, BUSY_SERVICE, AUTH_SERVICE, SETTINGS_SERVICE, MEETING_SERVICE } from './injection-tokens'
+import { IInitializeService, IAuthService, IBusyService, IGroupsService, ISettingsService, IUserService, IGroupService, IMeetingService, IDataService } from './';
+import { GROUP_SERVICE, USER_SERVICE, GROUPS_SERVICE, BUSY_SERVICE, AUTH_SERVICE, SETTINGS_SERVICE, MEETING_SERVICE, DATA_SERVICE } from './injection-tokens'
 
 import LogRocket from 'logrocket';
 
@@ -26,7 +26,7 @@ export class InitializeService implements IInitializeService {
   logRocket_appId = "tdzfnj/anonymous-meetings";
 
   constructor(
-    private translate: TranslateService,
+    private translateService: TranslateService,
     public zoomService: Zoom,
     @Inject(SETTINGS_SERVICE) private settingsService: ISettingsService,
     @Inject(AUTH_SERVICE) private authService: IAuthService,
@@ -34,53 +34,49 @@ export class InitializeService implements IInitializeService {
     @Inject(GROUP_SERVICE) private groupsService: IGroupsService,
     @Inject(GROUPS_SERVICE) private groupService: IGroupService,
     @Inject(USER_SERVICE) private userService: IUserService,
-    @Inject(MEETING_SERVICE) private meetingService: IMeetingService
+    @Inject(MEETING_SERVICE) private meetingService: IMeetingService,
+    @Inject(DATA_SERVICE) private dataService: IDataService
   ) { }
 
-  async initializeServices(auth: boolean, hybrid?: boolean) {
-    // console.log(`initializeServices(auth: ${auth}, hybrid: ${hybrid}): initialized: ${this.initialized}, auth_initialized: ${this.auth_initialized}`);
-    
-    if (auth && !this.auth_initialized) {
-      // settings require auth to be retrieved from firestore
-      await this.settingsService.initialize(true);
+  initializePlatformServices(hybrid?: boolean) {
+    this.busyService.initialize();
+  }
 
-      if (environment.production) {
-        LogRocket.init(this.logRocket_appId,
-          {
-            release: '[TODO insert build info here]',
-            console: {
-              isEnabled: true,
-              shouldAggregateConsoleErrors: true
-            }
-          });
-      }
+  async initializeDataServices(hybrid?: boolean) {
+    await this.settingsService.initialize(true);
+  }
 
-      if (hybrid) {
-        console.log('zoomService.initialize()');
-        this.zoomService.initialize(this.SDK_KEY, this.SDK_SECRET)
-          .then((success) => {
-            console.log(success);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      this.auth_initialized = true;
+  initializeServices(hybrid?: boolean) {
+    this.dataService.initialize(hybrid);
+    this.settingsService.initialize(false);
+    this.authService.initialize();
+
+    this.translateService.setDefaultLang('en-US');
+    this.translateService.use(navigator.language);
+    this.dataService.strings['initializing'] = this.translateService.get('INITIALIZING').toPromise();
+    this.dataService.strings.pleaseWait = this.translateService.get('PLEASE_WAIT').toPromise();
+    this.dataService.strings.creatingUser = this.translateService.get('CREATING_USER').toPromise();
+
+    if (environment.production) {
+      LogRocket.init(this.logRocket_appId,
+        {
+          release: '[TODO insert build info here]',
+          console: {
+            isEnabled: true,
+            shouldAggregateConsoleErrors: true
+          }
+        });
     }
-    else if (!this.initialized) {
 
-      await this.authService.initialize(true);
-
-      this.settingsService.initialize(auth);
-      await this.busyService.initialize();
-
-      this.translate.setDefaultLang('en-US');
-      this.translate.use(navigator.language);
-
-      // await this.groupsService.initialize();
-      // await this.groupService.initialize();
-
-      this.initialized = true;
+    if (hybrid) {
+      console.log('zoomService.initialize()');
+      this.zoomService.initialize(this.SDK_KEY, this.SDK_SECRET)
+        .then((success) => {
+          console.log(success);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 }

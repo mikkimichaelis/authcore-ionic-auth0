@@ -42,7 +42,6 @@ export class AppComponent {
     @Inject(DATA_SERVICE) public dataService: IDataService
   ) {
     console.log(`AppComponent()`);
-
     // TODO bug
     // if (environment.production) {
     //   enableProdMode();
@@ -54,45 +53,36 @@ export class AppComponent {
   async ngOnInit() { }
 
   async initializeApp() {
+    // debugger;
+    this.initializeService.initializeServices();
+
     this.platform.ready().then(async (readySource) => {
-
-      await this.initializeService.initializeServices(false, this.platform.is('hybrid'));
-
-      this.initializing = await this.translateService.get('INITIALIZING').toPromise();
-      this.pleaseWait = await this.translateService.get('PLEASE_WAIT').toPromise();
-      this.creatingUser = await this.translateService.get('CREATING_USER').toPromise();
-
-      this.dataService.user$.subscribe(
-        (user) => {
-          this.handleUserChange(user)
-        });
+      await this.initializeService.initializePlatformServices(this.platform.is('hybrid'));
 
       if (this.platform.is('hybrid')) {
         this.statusBar.styleDefault();
         this.splashScreen.hide();
-      } else {
-        // fallback to browser APIs
       }
 
-      // Redirect back to app after authenticating
+      this.dataService.authenticated$.subscribe(
+        async (auth) => {
+          if (auth) {
+            await this.initializeService.initializeDataServices();
+            if (!await this.authService.redirect()) {
+              console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> /home/tab/home`);
+              this.navController.navigateRoot('/home/tab/home');
+            }
+          }
+
+          if (!auth && !window.location.pathname.includes('/core/login')) {
+            console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> ${`/core/login?redirect=${window.location.pathname}`}`);
+            this.navController.navigateRoot(`/core/login?redirect=${window.location.pathname}`);
+          } 
+        });
+
       (window as any).handleOpenURL = (url: string) => {
         Auth0Cordova.onRedirectUri(url);
       }
-
-    // if (platform.is('ios') || platform.is('iphone') || platform.is('ipad')) {
-    //   config.signInOptions = [
-    //     firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    //   ];
-    // }
     });
-  }
-
-  async handleUserChange(user) {
-    if (_.isEmpty(user)) return;
-
-    await this.initializeService.initializeServices(true, this.platform.is('hybrid'));
-    console.log(`getUser() -> navigateRoot('/home/tab/home')`);
-    this.navController.navigateRoot('/home/tab/home');
-    // this.toastService.present(`Network Error`);
   }
 }
