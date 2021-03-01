@@ -1,5 +1,5 @@
-export * from './auth.cordova.service';
-// export * from './auth.web.service';
+// export * from './auth.device.service';
+export * from './auth.web.service';
 // export * from './auth.service';
 
 export * from './angular-fire-auth.interface';

@@ -62,9 +62,9 @@ export class AppComponent {
       this.pleaseWait = await this.translateService.get('PLEASE_WAIT').toPromise();
       this.creatingUser = await this.translateService.get('CREATING_USER').toPromise();
 
-      this.dataService.authUser$.subscribe(
-        (authUser) => {
-          this.handleAuthChange(authUser)
+      this.dataService.user$.subscribe(
+        (user) => {
+          this.handleUserChange(user)
         });
 
       if (this.platform.is('hybrid')) {
@@ -78,33 +78,21 @@ export class AppComponent {
       (window as any).handleOpenURL = (url: string) => {
         Auth0Cordova.onRedirectUri(url);
       }
+
+    // if (platform.is('ios') || platform.is('iphone') || platform.is('ipad')) {
+    //   config.signInOptions = [
+    //     firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    //   ];
+    // }
     });
   }
 
-  async handleAuthChange(authUser: firebase.User) {
-    if (!_.isEmpty(authUser)) {
-      await this.initializeService.initializeServices(true, this.platform.is('hybrid'));
-    }
+  async handleUserChange(user) {
+    if (_.isEmpty(user)) return;
 
-    if (!_.isEmpty(authUser) && !_.isEmpty(this.userService._user)) {
-      console.log(`(authUser && _user) -> navigateRoot('/home/tab/home')`);
-      this.navController.navigateRoot('/home/tab/home');
-    } else if (!_.isEmpty(authUser)) {
-      await this.busyService.present(this.initializing);
-      const user = await this.userService.getUser(authUser.uid);
-      await this.busyService.dismiss();
-      if (user) {
-        console.log(`getUser() -> navigateRoot('/home/tab/home')`);
-        await this.navController.navigateRoot('/home/tab/home');
-      } else {
-        this.toastService.present(`Network Error`);
-        // console.log(`!user -> navigateRoot('/core/login')`);
-        // this.navController.navigateRoot('/core/login');
-      }
-    } 
-    // else {
-    //   console.log(`navigateRoot('/core/login')`);
-    //   this.navController.navigateRoot('/core/login');
-    // }
+    await this.initializeService.initializeServices(true, this.platform.is('hybrid'));
+    console.log(`getUser() -> navigateRoot('/home/tab/home')`);
+    this.navController.navigateRoot('/home/tab/home');
+    // this.toastService.present(`Network Error`);
   }
 }

@@ -12,7 +12,15 @@ export class CallbackComponent implements OnInit {
   constructor(@Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   ngOnInit() {
-    this.authService.handleLoginCallback();
+    this.authService.initialized$.subscribe(init => {
+      if (init) {
+        console.log(`handleLoginCallback`);
+        this.authService.handleLoginCallback();
+      }
+    })
   }
 
+  ionViewDidEnter() {
+    console.log(`callback`);
+  }
 }

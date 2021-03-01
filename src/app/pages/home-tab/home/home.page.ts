@@ -1,19 +1,16 @@
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+
+import { Component, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { ModalController, NavController } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { BusyService } from '../../../services/busy.service';
-import { UserService } from '../../../services/user.service';
-import { GroupsService } from '../../../services/groups.service';
 
-import axios from 'axios';
-import { BehaviorSubject, Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { IMeeting, IUserFriend, Meeting } from 'src/shared/models';
+import { IUserFriend, Meeting } from 'src/shared/models';
 import { AUTH_SERVICE, BUSY_SERVICE, DATA_SERVICE, IAuthService, IBusyService, IDataService, IMeetingService, IToastService, IUserService, MEETING_SERVICE, TOAST_SERVICE, USER_SERVICE, ZoomService } from 'src/app/services';
-import { ModalController, NavController } from '@ionic/angular';
+import { BusyService } from '../../../services/busy.service';
 import { ViewPage } from '../../meetings-tab/view/view.page';
-import * as _ from 'lodash';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { subscribeOn } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -53,7 +50,7 @@ export class HomePage {
   _liveMeetingsRefreshInterval: any; // NodeJS.Timeout;
   async subscribe() {
     // TODO move to meeting service
-    this._userSubscription = this.userService.user$.subscribe(user => {
+    this._userSubscription = this.dataService.user$.subscribe(user => {
       // this is necessary to recreate the fav meeting query from favorites attached to IUser
       // TODO favorite meetings limited to 10 due to the 'where in array' query limit of 10
       this.meetingService.favoriteMeetingsSubscribe();

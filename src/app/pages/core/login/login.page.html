@@ -19,7 +19,14 @@
       expand="block"
       color="primary"
       *ngIf="!authService.isAuthenticated"
-      (click)="authService.signIn()">Log In</ion-button>
+      (click)="authService.signIn()">Sign In</ion-button>
+      <br>
+      <ion-button
+        button
+        expand="block"
+        color="danger"
+        (click)="authService.signOut()">Log Out</ion-button>
+
     <!-- Not loading, logged in: show profile and logout button -->
     <ng-template [ngIf]="authService.isAuthenticated">
       <ion-card *ngIf="authService.user">

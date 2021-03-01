@@ -51,6 +51,13 @@ resources/*
 
 !resources/images
 
+cordova-plugin-zoom.device.4.6.21666.0603/
+
+# !plugins/
+# plugins/*
+# !plugins/cordova-plugin-zoom.simulator.4.6.21666.0603/
+# !plugins/cordova-plugin-zoom.simulator.4.6.21666.0603/www
+
 # !resources/android
 # resources/android/*
 # !resources/android/xml

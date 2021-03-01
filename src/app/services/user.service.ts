@@ -22,9 +22,7 @@ import _ from 'lodash';
 })
 export class UserService implements IUserService {
 
-  isNewUser: boolean = false;
   _user: User;
-  user$: ReplaySubject<User> = new ReplaySubject<User>(1);
 
   _homeMeeting: Meeting;
   homeMeeting$: ReplaySubject<Meeting> = new ReplaySubject<Meeting>(1);
@@ -35,9 +33,22 @@ export class UserService implements IUserService {
   constructor(
     @Inject(FIRESTORE_SERVICE) private fss: IFirestoreService,
     @Inject(ANGULAR_FIRE_FUNCTIONS) private aff: IAngularFireFunctions,
-    @Inject(DATA_SERVICE) private DataService: IDataService,
+    @Inject(DATA_SERVICE) private dataService: IDataService,
     @Inject(TRANSLATE_SERVICE) private translate: ITranslateService,
     @Inject(SETTINGS_SERVICE) private settingsService: ISettingsService) {
+
+    this.dataService.newUser$.subscribe(async (fireUser) => {
+      if (fireUser !== null) {
+        await this.createUser(fireUser);
+      }
+    });
+
+    this.dataService.fireUser$.subscribe(async (fireUser) => {
+      if (fireUser !== null) {
+        await this.getUser(fireUser.uid);
+        this.dataService.user$.next()
+      }
+    });
   }
 
   public async getUser(id: string): Promise<User> {
@@ -64,7 +75,7 @@ export class UserService implements IUserService {
           this._user = new User(user.data());
           console.log(`...Loaded User...`);
           // this.userSubscribe(this._user.id);
-          this.user$.next(this._user);
+          this.dataService.user$.next(this._user);
           return this._user;
         } else {
           // User record not yet created by onAuthCreate in the Mighty Google Cloud
@@ -78,7 +89,7 @@ export class UserService implements IUserService {
             tap(() => console.log('retrying...'))
           );
       })
-      ).toPromise();
+    ).toPromise();
   }
 
   userUnsubscribe() {
@@ -97,7 +108,7 @@ export class UserService implements IUserService {
       next: async (user) => {
         this._user = new User(user);
         console.log(`...Received User...`);
-        this.user$.next(this._user);
+        this.dataService.user$.next(this._user);
         this.homeMeetingSubscribe(this._user.homeMeeting);
       },
       error: async (error) => {
@@ -159,6 +170,19 @@ export class UserService implements IUserService {
     })
   }
 
+  async createUser(fireUser: any): Promise<boolean> {
+    console.log(`createUser()`);
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.makeCallableAsync('createUser', { uid: fireUser.uid, name: fireUser.displayName});
+        resolve(true);
+      } catch (error) {
+        console.log(`createUser Error: ${error.message}`);
+        resolve(false);
+      }
+    })
+  }
+
   async setName(firstName: string, lastInitial: string) {
     console.log(`setName()`);
     await this.makeCallableAsync('setName', { firstName: firstName, lastInitial: lastInitial });
@@ -170,7 +194,6 @@ export class UserService implements IUserService {
   }
 
   async makeFavGroup(id: string, make: boolean) {
-
     if (make) {
       await this.makeCallableAsync('addFavorite', { gid: id });
     } else {

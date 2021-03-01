@@ -2,24 +2,36 @@ import { Platform } from '@ionic/angular';
 import firebase from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
 
-export interface IAuthService {
+export interface IAuthServiceBase {
+    initialized$: ReplaySubject<boolean>;
+
+    webAuth0: any;
 
     loading: boolean;
-
-    user: any;
-    userProfile: any;
-    loggedInFirebase: boolean;
-
     isAuthenticated: boolean;
 
-    signIn(): Promise<any>;
+    fireUser: firebase.User;
+    fireToken: any;
+    
+    authUser: any;
+    authToken: any;
+    expiresAt: number;
+
+    deviceSignOutUrl: string;
+    webSignOutUrl: string;
+
+    getAuthUser(authToken: string): Promise<any>;
+    getFirebaseToken(authToken: string): Promise<any>;
+    setSession();
+    getSession();
+
+    handleLoginCallback(): Promise<any>;
+
+    initialize(auth: boolean);
+}
+export interface IAuthService extends IAuthServiceBase {
+
+    signIn(redirect?: string): Promise<any>;
     signOut(): Promise<any>;
-
-    handleLoginCallback();
-
-    ////////////////////////////////
-
-    auth: firebase.auth.Auth;
-    authUser: firebase.User;
 }
     

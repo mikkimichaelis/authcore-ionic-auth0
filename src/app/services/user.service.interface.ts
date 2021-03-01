@@ -3,10 +3,7 @@ import { Meeting, User } from '../../shared/models';
 
 export interface IUserService {
 
-    isNewUser: boolean
-
     _user: User;
-    user$: ReplaySubject<User>;
 
     _homeMeeting: Meeting;
     homeMeeting$: ReplaySubject<Meeting>;
@@ -14,6 +11,7 @@ export interface IUserService {
     getUser(id: string): Promise<User>;
     saveUserAsync(user: User);
 
+    createUser(authUser: any): Promise<boolean>;
     setName(firstName: string, lastInitial: string);
     makeHomeGroup(id: string);
     makeFavGroup(id: string, make: boolean);

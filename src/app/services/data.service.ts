@@ -9,9 +9,8 @@ import { IDataService } from './data.service.interface';
 })
 export class DataService implements IDataService {
 
-  authUser$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1)
-  logout$: Subject<boolean> = new Subject<boolean>();
-  
+  newUser$: Subject<any> = new Subject<any>();
+  fireUser$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1)
   user$: ReplaySubject<User> = new ReplaySubject<User>(1);
 
   homeMeeting$: ReplaySubject<Meeting> = new ReplaySubject<Meeting>(1);
@@ -19,6 +18,8 @@ export class DataService implements IDataService {
   favoriteMeetings$: ReplaySubject<Meeting[]> = new ReplaySubject<Meeting[]>(1);
   liveMeetings$: ReplaySubject<Meeting[]> = new ReplaySubject<Meeting[]>(1);
   searchMeetings$: ReplaySubject<Meeting[]> = new ReplaySubject<Meeting[]>(1);
+
+  logout$: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
 }

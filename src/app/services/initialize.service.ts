@@ -38,7 +38,8 @@ export class InitializeService implements IInitializeService {
   ) { }
 
   async initializeServices(auth: boolean, hybrid?: boolean) {
-    console.log(`initializeServices(auth: ${auth}, hybrid: ${hybrid}): initialized: ${this.initialized}, auth_initialized: ${this.auth_initialized}`);
+    // console.log(`initializeServices(auth: ${auth}, hybrid: ${hybrid}): initialized: ${this.initialized}, auth_initialized: ${this.auth_initialized}`);
+    
     if (auth && !this.auth_initialized) {
       // settings require auth to be retrieved from firestore
       await this.settingsService.initialize(true);
@@ -67,6 +68,9 @@ export class InitializeService implements IInitializeService {
       this.auth_initialized = true;
     }
     else if (!this.initialized) {
+
+      await this.authService.initialize(true);
+
       this.settingsService.initialize(auth);
       await this.busyService.initialize();
 
