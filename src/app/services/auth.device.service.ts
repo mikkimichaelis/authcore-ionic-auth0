@@ -10,7 +10,8 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AuthServiceBase } from './auth.service.base';
-import { DATA_SERVICE, IAuthService, IDataService, IUserService, USER_SERVICE } from '.';
+import { IAuthService } from './auth.service.interface';
+import { DATA_SERVICE, IDataService } from '.';
 
 declare let cordova: any;
 @Injectable()
