@@ -3,20 +3,17 @@ import { ActivatedRoute } from '@angular/router';
 import { AUTH_SERVICE, IAuthService } from 'src/app/services';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-logout',
+  templateUrl: './logout.page.html',
+  styleUrls: ['./logout.page.scss'],
 })
-export class LoginPage {
+export class LogoutPage {
 
   constructor(
     private route: ActivatedRoute, 
     @Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
   async ionViewDidEnter() {
-    if (this.route.snapshot.queryParamMap.get('signOut')) {
-      await this.authService.signOut();
-    }
-    this.authService.signIn(this.route.snapshot.queryParamMap.get('redirect'))
+    await this.authService.signOut();
   }
 }

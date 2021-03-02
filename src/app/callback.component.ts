@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AUTH_SERVICE, IAuthService } from './services';
 
 @Component({
@@ -7,11 +8,15 @@ import { AUTH_SERVICE, IAuthService } from './services';
     Loading...
   `
 })
-export class CallbackComponent implements OnInit {
+export class CallbackComponent {
 
-  constructor(@Inject(AUTH_SERVICE) private authService: IAuthService) { }
+  constructor(private router: Router, @Inject(AUTH_SERVICE) private authService: IAuthService) { }
 
-  ngOnInit() {
-    this.authService.handleLoginCallback();
+  async ionViewDidEnter() {
+    // if handled, we should be authenticated and redirected appropriately
+    if (!await this.authService.handleLoginCallback()) {
+      // if not, lets explicitly route to login
+      this.router.navigateByUrl('/core/login');
+    };
   }
 }

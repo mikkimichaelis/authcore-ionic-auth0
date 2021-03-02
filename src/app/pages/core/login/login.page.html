@@ -13,7 +13,6 @@
 <ion-content>
   <p *ngIf="authService.loading" class="ion-text-center">Loading...</p>
   <ng-template [ngIf]="!authService.loading">
-    <!-- Not loading, not logged in: show login button -->
     <ion-button
       button
       expand="block"
@@ -25,22 +24,7 @@
         button
         expand="block"
         color="danger"
+        *ngIf="authService.isAuthenticated"
         (click)="authService.signOut()">Log Out</ion-button>
-
-    <!-- Not loading, logged in: show profile and logout button -->
-    <ng-template [ngIf]="authService.isAuthenticated">
-      <ion-card *ngIf="authService.user">
-        <img [src]="authService.user.picture">
-        <ion-card-content>
-          <ion-card-title>{{ auth.user.name }}</ion-card-title>
-          <pre>{{ auth.user | json }}</pre>
-        </ion-card-content>
-      </ion-card>
-      <ion-button
-        button
-        expand="block"
-        color="danger"
-        (click)="authService.signOut()">Log Out</ion-button>
-    </ng-template>
   </ng-template>
 </ion-content>

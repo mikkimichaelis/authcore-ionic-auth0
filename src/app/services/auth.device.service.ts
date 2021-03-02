@@ -24,7 +24,6 @@ export class AuthService extends AuthServiceBase implements IAuthService {
     private http: HttpClient,
     private afAuth: AngularFireAuth,
     private safariViewController: SafariViewController,
-    @Inject(USER_SERVICE) public userService: IUserService,
     @Inject(DATA_SERVICE) public dataService: IDataService
   ) {
     super(
@@ -33,7 +32,6 @@ export class AuthService extends AuthServiceBase implements IAuthService {
       router,
       http,
       afAuth,
-      userService,
       dataService);
   }
 
@@ -43,7 +41,7 @@ export class AuthService extends AuthServiceBase implements IAuthService {
     return new Promise((resolve, reject) => {
       this.auth0.authorize(this.options, async (error, authResult) => {
         if (!error && authResult) {
-          await this.processAuthResult(authResult);
+          await this.processAuthToken(authResult.authToken);
           this.redirect();
           resolve(true);
         } else {

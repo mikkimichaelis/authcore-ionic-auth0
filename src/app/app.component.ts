@@ -64,21 +64,21 @@ export class AppComponent {
         this.splashScreen.hide();
       }
 
-      this.dataService.authenticated$.subscribe(
-        async (auth) => {
-          if (auth) {
-            await this.initializeService.initializeDataServices();
-            if (!await this.authService.redirect()) {
-              console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> /home/tab/home`);
-              this.navController.navigateRoot('/home/tab/home');
-            }
-          }
+      // this.dataService.authenticated$.subscribe(
+      //   async (auth) => {
+      //     if (auth) {
+      //       await this.initializeService.initializeDataServices();
+      //       if (!await this.authService.redirect()) {
+      //         console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> /home/tab/home`);
+      //         this.navController.navigateRoot('/home/tab/home');
+      //       }
+      //     }
 
-          if (!auth && !window.location.pathname.includes('/core/login')) {
-            console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> ${`/core/login?redirect=${window.location.pathname}`}`);
-            this.navController.navigateRoot(`/core/login?redirect=${window.location.pathname}`);
-          } 
-        });
+      //     if (!auth && !window.location.pathname.includes('/core/login')) {
+      //       console.log(`appComponent.authenticated$(${auth}): ${window.location.pathname} -> ${`/core/login?redirect=${window.location.pathname}`}`);
+      //       this.navController.navigateRoot(`/core/login?redirect=${window.location.pathname}`);
+      //     } 
+      //   });
 
       (window as any).handleOpenURL = (url: string) => {
         Auth0Cordova.onRedirectUri(url);

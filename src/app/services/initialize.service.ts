@@ -46,10 +46,10 @@ export class InitializeService implements IInitializeService {
     await this.settingsService.initialize(true);
   }
 
-  initializeServices(hybrid?: boolean) {
+  async initializeServices(hybrid?: boolean) {
     this.dataService.initialize(hybrid);
     this.settingsService.initialize(false);
-    this.authService.initialize();
+    await this.authService.initialize();
 
     this.translateService.setDefaultLang('en-US');
     this.translateService.use(navigator.language);

@@ -7,8 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { IMeeting, IUser, Meeting } from '../../shared/models';
 import { User } from '../../shared/models';
 
-import { IUserService, ITranslateService, IFirestoreService, IDataService } from './';
-import { TRANSLATE_SERVICE, FIRESTORE_SERVICE, ANGULAR_FIRE_FUNCTIONS, SETTINGS_SERVICE, AUTH_SERVICE, DATA_SERVICE } from './injection-tokens';
+import { IUserService, ITranslateService, IFirestoreService, IDataService, IToastService } from './';
+import { TRANSLATE_SERVICE, FIRESTORE_SERVICE, ANGULAR_FIRE_FUNCTIONS, SETTINGS_SERVICE, AUTH_SERVICE, DATA_SERVICE, TOAST_SERVICE } from './injection-tokens';
 import { IAngularFirestore } from './angular-firestore.interface';
 
 import { IAngularFireFunctions } from './angular-fire-functions.interface';
@@ -31,23 +31,68 @@ export class UserService implements IUserService {
   private _homeMeetingSubscription: Subscription;
 
   constructor(
+    @Inject(TOAST_SERVICE) private toastService: IToastService,
     @Inject(FIRESTORE_SERVICE) private fss: IFirestoreService,
     @Inject(ANGULAR_FIRE_FUNCTIONS) private aff: IAngularFireFunctions,
     @Inject(DATA_SERVICE) private dataService: IDataService,
     @Inject(TRANSLATE_SERVICE) private translate: ITranslateService,
     @Inject(SETTINGS_SERVICE) private settingsService: ISettingsService) {
 
-    this.dataService.newUser$.subscribe(async (fireUser) => {
-      if (fireUser !== null) {
-        await this.createUser(fireUser);
-      }
-    });
-
     this.dataService.fireUser$.subscribe(async (fireUser) => {
       if (fireUser !== null) {
-        await this.getUser(fireUser.uid);
+        await this.getUserWithCreate(fireUser);
+      } else {
+        this.unsubscribe();
+        this._user = null;
+        this.dataService.user$.next(this._user);
       }
     });
+  }
+
+  public async getUserWithCreate(fireUser: firebase.User) {
+    if (this.dataService.isNewUser) {
+      try {
+        await this.createUser(fireUser);
+      } catch (error) {
+        console.error(error.message);
+        this.toastService.present(`createUser(isNewUser): Network Communication Error`);
+        return;
+      }
+    }
+
+    try {
+      await this.getUser(fireUser.uid);
+      this.userSubscribe(this._user.id);
+      return;
+    } catch {
+      try {
+        await this.createUser(fireUser);
+        await this.getUser(fireUser.uid);
+        this.userSubscribe(this._user.id);
+      return;
+      } catch (error) {
+        console.error(error.message);
+        this.toastService.present(`getUser() -> createUser(): Network Communication Error`);
+        return;
+      }
+    }
+  }
+
+  async createUser(fireUser: any): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.makeCallableAsync('createUser', { 
+          uid: fireUser.uid, 
+          name: this.dataService.authUser.name,
+          authUser: this.dataService.authUser
+        });
+        console.log(`createUser(): SUCCESS`);
+        resolve(true);
+      } catch (error) {
+        console.log(`createUser(): ERROR: ${error.message}`);
+        resolve(false);
+      }
+    })
   }
 
   public async getUser(id: string): Promise<User> {
@@ -73,27 +118,28 @@ export class UserService implements IUserService {
         if (user.exists) {
           this._user = new User(user.data());
           console.log(`...Loaded User...`);
-          // this.userSubscribe(this._user.id);
-          this.dataService.user$.next(this._user);
           return this._user;
         } else {
-          // User record not yet created by onAuthCreate in the Mighty Google Cloud
-          throw new Error(`Where's Waldo? ${id}`);
+          throw new Error(`User not found: ${id}`);
         }
       }),
-      retryWhen(errors => {
-        return errors
-          .pipe(
-            delayWhen(() => timer(2000)),
-            tap(() => console.log('retrying...'))
-          );
-      })
+      // retryWhen(errors => {
+      //   return errors
+      //     .pipe(
+      //       delayWhen(() => timer(2000)),
+      //       tap(() => console.log('retrying...'))
+      //     );
+      // })
     ).toPromise();
+  }
+
+  unsubscribe() {
+    this.userUnsubscribe();
+    this.homeMeetingUnsubscribe();
   }
 
   userUnsubscribe() {
     if (this._userSubscription && !this._userSubscription.closed) {
-      console.log(`this._userSubscription.unsubscribe()`);
       this._userSubscription.unsubscribe();
       this._userSubscription = null;
     }
@@ -143,11 +189,6 @@ export class UserService implements IUserService {
     }
   }
 
-  unsubscribe() {
-    this.userUnsubscribe();
-    this.homeMeetingUnsubscribe();
-  }
-
   async saveUserAsync(user: User) {
     console.log(`saveUserAsync()`);
     try {
@@ -166,19 +207,6 @@ export class UserService implements IUserService {
         console.error(error);
         reject(error);
       })
-    })
-  }
-
-  async createUser(fireUser: any): Promise<boolean> {
-    console.log(`createUser()`);
-    return new Promise(async (resolve, reject) => {
-      try {
-        await this.makeCallableAsync('createUser', { uid: fireUser.uid, name: fireUser.displayName});
-        resolve(true);
-      } catch (error) {
-        console.log(`createUser Error: ${error.message}`);
-        resolve(false);
-      }
     })
   }
 

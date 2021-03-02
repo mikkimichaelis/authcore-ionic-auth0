@@ -24,7 +24,6 @@ export class AuthService extends AuthServiceBase implements IAuthService {
     private router: Router,
     private http: HttpClient,
     private afAuth: AngularFireAuth,
-    @Inject(USER_SERVICE) public userService: IUserService,
     @Inject(DATA_SERVICE) public dataService: IDataService
   ) {
     super(
@@ -33,7 +32,6 @@ export class AuthService extends AuthServiceBase implements IAuthService {
       router,
       http,
       afAuth,
-      userService,
       dataService);
   }
 
@@ -46,27 +44,32 @@ export class AuthService extends AuthServiceBase implements IAuthService {
 
   async handleLoginCallback(): Promise<any> {
     this.loading = true;
-    try {
-      this.webAuth0.parseHash(async (error, authResult) => {
-        if (authResult && authResult.accessToken) {
-          await this.processAuthResult(authResult);
-          console.log(`authenticated: ${!_.isEmpty(this.authToken)} firebase: ${!_.isEmpty(this.fireToken)}`)
-          this.redirect();
-        } else {
-          if (error) {
-            console.error(`Error authenticating: ${error.message}`);
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.webAuth0.parseHash(async (error, authResult) => {
+          // debugger;
+          if (authResult && authResult.accessToken) {
+            await this.processAuthToken(authResult.accessToken);
+            console.log(`handleLoginCallback(): authenticated: ${!_.isEmpty(this.authToken)} firebase: ${!_.isEmpty(this.fireToken)}`)
+            this.redirect();
+            resolve(true);
+          } else {
+            if (error) {
+              console.error(`handleLoginCallback(): Error authenticating: ${error.message}`);
+            }
+            this.zone.run(() => this.loading = false);
+            resolve(false);
           }
-          this.zone.run(() => this.loading = false);
-          this.redirect('/core/login');
-        }
-      });
-    } catch (error) {
-      console.error(`Error handleLoginCallback: ${error.message}`);
-    }
+        });
+      } catch (error) {
+        console.error(`Error handleLoginCallback: ${error.message}`);
+        reject(error);
+      }
+    });
   }
 
   async signOut(): Promise<any> {
-    super.signOut();
+    await super.signOut();
     window.location.href = this.webSignOutUrl;
   }
 }

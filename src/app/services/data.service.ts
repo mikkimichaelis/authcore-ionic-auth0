@@ -9,11 +9,12 @@ import { IDataService } from './data.service.interface';
 })
 export class DataService implements IDataService {
 
+  isNewUser: boolean;
   hybrid: boolean;
 
+  authUser: any;
   authenticated$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
-  newUser$: Subject<any> = new Subject<any>();
   fireUser$: ReplaySubject<firebase.User> = new ReplaySubject<firebase.User>(1)
   user$: ReplaySubject<User> = new ReplaySubject<User>(1);
 

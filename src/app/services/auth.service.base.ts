@@ -13,8 +13,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import * as Auth0 from 'auth0-js';
 
-import { IAuthServiceBase, IDataService, IUserService, } from '.';
-import { DATA_SERVICE, USER_SERVICE } from './injection-tokens';
+import { IAuthServiceBase, IDataService } from '.';
+import { DATA_SERVICE } from './injection-tokens';
 
 import { CORDOVA_AUTH_CONFIG, WEB_AUTH_CONFIG } from '../../private/private.config';
 
@@ -46,7 +46,7 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set authToken(authToken) {
     this._authToken = authToken;
-    // this._storage.set('authToken', authToken)
+    this._storage.set('authToken', authToken)
   }
 
   _authUser: any = null;
@@ -55,7 +55,8 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set authUser(authUser) {
     this._authUser = authUser;
-    // this._storage.set('authUser', authUser)
+    this._dataService.authUser = this._authUser;
+    this._storage.set('authUser', authUser)
   }
 
   _fireToken: string = null;
@@ -64,7 +65,6 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
   set fireToken(fireToken) {
     this._fireToken = fireToken;
-    // this._storage.set('fireToken', fireToken);
   }
 
   _fireUser: firebase.User = null;
@@ -72,10 +72,11 @@ export class AuthServiceBase implements IAuthServiceBase {
     return this._fireUser;
   }
   set fireUser(fireUser) {
-    this._fireUser = fireUser;
-    this._dataService.fireUser$.next(fireUser);
-    // this._storage.set('fireUser', fireUser);
-    this._dataService.authenticated$.next(fireUser != null);
+    if (this._fireUser !== fireUser) {
+      this._fireUser = fireUser
+      this._dataService.fireUser$.next(fireUser);
+      this._dataService.authenticated$.next(fireUser != null);
+    }
   }
   
   private afAuthStateSub: Subscription;
@@ -88,7 +89,6 @@ export class AuthServiceBase implements IAuthServiceBase {
     private _router: Router,
     private _http: HttpClient,
     private _afAuth: AngularFireAuth,
-    @Inject(USER_SERVICE) public _userService: IUserService,
     @Inject(DATA_SERVICE) public _dataService: IDataService) {
 
     // debugger;
@@ -103,12 +103,11 @@ export class AuthServiceBase implements IAuthServiceBase {
   }
 
   public async initialize() {
-    // await this.getSession();
-    // this.initialized$.next(true);
+    await this.getSession();
   }
 
-  public async processAuthResult(authResult) {
-    this.authToken = authResult.accessToken;
+  public async processAuthToken(accessToken) {
+    this.authToken = accessToken;
     try {
       await this.getAuthUser(this.authToken);
       await this.getFirebaseToken(this.authToken);
@@ -120,13 +119,13 @@ export class AuthServiceBase implements IAuthServiceBase {
   getAuthUser(authToken: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       // this seems to clear this.authToken.  weird.
-      this.webAuth0.client.userInfo(authToken, (error, profile) => {
+      this.webAuth0.client.userInfo(authToken, (error, authUser) => {
         if (error) {
           console.warn(`Error retrieving Auth0 profile: ${error.message}`);
           reject(error);
-        } else if (profile) {
-          this.authUser = profile;
-          resolve(profile);
+        } else if (authUser) {
+          this.authUser = authUser;
+          resolve(authUser);
         }
       });
     });
@@ -159,11 +158,8 @@ export class AuthServiceBase implements IAuthServiceBase {
     return new Promise<any>((resolve, reject) => {
       this._afAuth.auth.signInWithCustomToken(fireToken)
         .then(async response => {
-          if (response.additionalUserInfo.isNewUser) {
-            await this._userService.createUser(response.user); 
-          }
+          this._dataService.isNewUser = response.additionalUserInfo.isNewUser;
           this.fireUser = response.user;
-
           this.scheduleCustomTokenRenewal();
           resolve(true);
         })
@@ -181,32 +177,31 @@ export class AuthServiceBase implements IAuthServiceBase {
     this.authToken = null;
     this.fireUser = null;
     this.fireToken = null;
-    this.setSession();
+    await this.setSession();
 
     this._dataService.logout$.next(true);
     await this._afAuth.auth.signOut();
   }
 
-  public setSession() {
-    // this._storage.set('authUser', this.authUser)
-    // this._storage.set('authToken', this.authToken)
-    // this._storage.set('fireUser', this.fireUser);
-    // this._storage.set('fireToken', this.fireToken);
+  public async setSession() {
+    const session = [];
+    session.push(this._storage.set('authUser', this.authUser))
+    session.push(this._storage.set('authToken', this.authToken))
+    await Promise.all(session);
   }
 
-  async getSession() {
-    // const session = [];
-    // session.push(this._storage.get('authUser').then(authUser => this.authUser = authUser));
-    // session.push(this._storage.get('authToken').then(authToken => this.authToken = authToken));
-    // session.push(this._storage.get('fireUser').then(fireUser => this.fireUser = fireUser));
-    // session.push(this._storage.get('fireToken').then(fireToken => this.fireToken = fireToken));
-    // await Promise.all(session);
+  public async getSession() {
+    // debugger;
+    const session = [];
+    session.push(this._storage.get('authUser').then(authUser => this.authUser = authUser));
+    session.push(this._storage.get('authToken').then(authToken => this.authToken = authToken));
+    await Promise.all(session);
     // console.log(`session loaded authToken: ${this.authToken !== null} authUser: ${this.authUser !== null } fireToken: ${this.fireToken !== null} fireUser:${this.fireUser !== null}`)
   }
 
   async setAuthRedirect(redirect: string) {
     redirect = redirect ? redirect : window.location.pathname;
-    if (redirect === '/core/login' || redirect === '/callback') return;
+    if (redirect.includes('core/login') || redirect.includes('callback')) return;
     console.log(`[authRedirect]: ${redirect}`);
     await this._storage.set('authRedirect', redirect);
   }
@@ -220,13 +215,12 @@ export class AuthServiceBase implements IAuthServiceBase {
     } else {
       return new Promise((resolve, reject) => {
         this._storage.get('authRedirect').then(redirect => {
-          if (redirect) {
-            console.log(`authService.redirect(): ${window.location.pathname} -> redirect: ${redirect}`);
-            this._router.navigateByUrl(redirect);
-            resolve(true);
-          } else {
-            resolve(false);
-          }
+          if (!redirect) {
+            redirect = '/home/tab/home';
+          } 
+          console.log(`authService.redirect(): ${window.location.pathname} -> redirect: ${redirect}`);
+          this._router.navigateByUrl(redirect);
+          resolve(true);
         })
       });
     }
