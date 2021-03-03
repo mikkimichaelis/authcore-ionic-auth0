@@ -31,9 +31,9 @@ export class AuthServiceBase implements IAuthServiceBase {
     responseType: WEB_AUTH_CONFIG.auth.responseType,
     audience: WEB_AUTH_CONFIG.auth.audience,
     scope: WEB_AUTH_CONFIG.auth.scope
-  };
+  }; 
 
-  public deviceSignOutUrl = `https://${CORDOVA_AUTH_CONFIG.domain}/v2/logout?client_id=${CORDOVA_AUTH_CONFIG.clientId}&returnTo=${CORDOVA_AUTH_CONFIG.packageIdentifier}://${CORDOVA_AUTH_CONFIG.domain}/cordova/${CORDOVA_AUTH_CONFIG.packageIdentifier}/callback`;
+  public deviceSignOutUrl = `https://${CORDOVA_AUTH_CONFIG.domain}/v2/logout?client_id=${CORDOVA_AUTH_CONFIG.clientID}&returnTo=${CORDOVA_AUTH_CONFIG.packageIdentifier}://${CORDOVA_AUTH_CONFIG.domain}/cordova/${CORDOVA_AUTH_CONFIG.packageIdentifier}/callback`;
   public webSignOutUrl = `https://${WEB_AUTH_CONFIG.auth.domain}/v2/logout?client_id=${WEB_AUTH_CONFIG.auth.clientID}&returnTo=${encodeURIComponent(WEB_AUTH_CONFIG.auth.redirectUri)}`;
 
   get isAuthenticated(): boolean {
@@ -221,6 +221,11 @@ export class AuthServiceBase implements IAuthServiceBase {
           console.log(`authService.redirect(): ${window.location.pathname} -> redirect: ${redirect}`);
           this._router.navigateByUrl(redirect);
           resolve(true);
+        }, error => {
+          const redirect = '/home/tab/home';
+          console.error(`authService.redirect(): ${window.location.pathname} -> redirect: ${redirect}`);
+          this._router.navigateByUrl(redirect);
+          reject(true);
         })
       });
     }

@@ -4,9 +4,7 @@ import { AUTH_SERVICE, IAuthService } from './services';
 
 @Component({
   selector: 'app-callback',
-  template: `
-    Loading...
-  `
+  template: ``
 })
 export class CallbackComponent {
 
